@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { navVariants, itemVariants } from '../../animations/navbarAnimation';
-import "../../style/components/Navbar.css";
+import "../../style/components/Navbar.css"
 
 function Navbar({ links, title }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -39,7 +39,15 @@ function Navbar({ links, title }) {
                     animate="visible"
                 >
                     {links.map((link, i) => (
-                        <motion.div key={i} variants={itemVariants} className="nav-item">
+                        <motion.div
+                            key={i}
+                            variants={itemVariants}
+                            /*whileHover={{ 
+                                scale: 1.05,
+                                y: -2,
+                            }}
+                            whileTap={{ scale: 0.95 }} ver si hay otra forma mejor de hacer con el css*/
+                        >
                             <NavLink
                                 to={link.to}
                                 onClick={(e) => link.label === 'Salir' && handleLinkClick(e, link)}
@@ -49,24 +57,6 @@ function Navbar({ links, title }) {
                             >
                                 {link.label}
                             </NavLink>
-
-                            {/* Submenu */}
-                            {link.children && (
-                                <ul className="submenu">
-                                    {link.children.map((child, j) => (
-                                        <li key={j}>
-                                            <NavLink
-                                                to={child.to}
-                                                className={({ isActive }) => 
-                                                    `submenu-link ${isActive ? 'submenu-link--active' : ''}`
-                                                }
-                                            >
-                                                {child.label}
-                                            </NavLink>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
                         </motion.div>
                     ))}
                 </motion.div>
@@ -81,11 +71,15 @@ function Navbar({ links, title }) {
                 
                 {isOpen && (
                     <>
-                        <div className="nav-overlay" onClick={() => setIsOpen(false)} />
+                        <div
+                            className="nav-overlay"
+                            onClick={() => setIsOpen(false)}
+                        />
+                        
                         <div className="nav-mobile nav-mobile--open">
                             <div className="nav-mobile-content">
                                 {links.map((link, i) => (
-                                    <div key={i} className="nav-mobile-item">
+                                    <div key={i}>
                                         <NavLink
                                             to={link.to}
                                             onClick={(e) => handleLinkClick(e, link)}
@@ -95,21 +89,6 @@ function Navbar({ links, title }) {
                                         >
                                             {link.label}
                                         </NavLink>
-
-                                        {/* Submenu en móvil */}
-                                        {link.children && (
-                                            <div className="nav-mobile-submenu">
-                                                {link.children.map((child, j) => (
-                                                    <NavLink 
-                                                        key={j} 
-                                                        to={child.to} 
-                                                        className="nav-mobile-sublink"
-                                                    >
-                                                        {child.label}
-                                                    </NavLink>
-                                                ))}
-                                            </div>
-                                        )}
                                     </div>
                                 ))}
                             </div>
