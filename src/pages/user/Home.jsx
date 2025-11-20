@@ -5,7 +5,7 @@ import TextAtom from '../../components/atoms/TextAtom';
 
 const Home = () => {
     const [productos, setProductos] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [setLoading] = useState(true);
     
     useEffect(() => {
         fetchProductos();

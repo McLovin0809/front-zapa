@@ -1,7 +1,7 @@
 // services/productoService.js
 import axios from 'axios';
 
-const BASE_URL = '';
+const BASE_URL = 'https://backend-zapa.onrender.com/api/productos';
 
 class ProductoService {
     getAllProductos() {
