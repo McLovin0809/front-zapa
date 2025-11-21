@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Login from "./Login";
 import Register from "./Register";
-import "../../style/pages/authPanel.css";
+import "../../style/pages/AuthPanel.css";
 
 export default function AuthPanel() {
   const location = useLocation();
