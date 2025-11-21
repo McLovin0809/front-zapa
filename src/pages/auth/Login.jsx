@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Forms from "../../components/templates/Forms";
 import { loginData } from "./AuthData/AuthData";
-import usuarioService from "../../services/usuarioService";
+import usuarioService from "../../services/UsuarioService";
 import "../../style/pages/AuthPanel.css";
 
 export default function Login() {

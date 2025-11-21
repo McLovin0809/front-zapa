@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Forms from "../../components/templates/Forms";
 import { registerData } from "./AuthData/AuthData";
-import UsuarioService from "../../services/usuarioService";
+import UsuarioService from "../../services/UsuarioService";
 import "../../style/pages/AuthPanel.css";
 
 export default function Register() {
