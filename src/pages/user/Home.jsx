@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import TextAtom from '../../components/atoms/TextAtom';
 import carouselImages from '../../data/image/image';
+import { motion } from 'framer-motion';
+import { carouselVariants, itemVariants } from '../../animations/carouselAnimations';
 import '../../style/pages/Home.css'
 
 const Home = () => {
@@ -51,53 +53,66 @@ const Home = () => {
         <main>
             <div className="home">
                 {/* Carousel de imágenes */}
-                <div className="carousel">
-                    <div className="carousel-inner">
-                        {carouselImages.map((image, index) => (
-                            <div 
-                                key={index}
-                                className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
-                            >
-                                <img 
-                                    src={image.src} 
-                                    alt={image.alt}
-                                    className="carousel-image"
-                                />
-                                <div className="carousel-content">
-                                    <TextAtom variant="h2" className="carousel-title">
-                                        {image.title}
-                                    </TextAtom>
-                                    <TextAtom variant="p" className="carousel-description">
-                                        {image.description}
-                                    </TextAtom>
-                                    <button className="carousel-btn">
-                                        Ver Colección
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                <motion.div 
+                className="carousel"
+                variants={carouselVariants}
+                initial="hidden"
+                animate="visible"
+                >
+                <div className="carousel-inner">
+                    {carouselImages.map((image, index) => (
+                    <div 
+                        key={index}
+                        className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
+                    >
+                        <img 
+                        src={image.src} 
+                        alt={image.alt}
+                        className="carousel-image"
+                        />
+                        <motion.div 
+                        className="carousel-content"
+                        variants={carouselVariants}
+                        >
+                        <motion.div variants={itemVariants}>
+                            <TextAtom variant="h2" className="carousel-title">
+                            {image.title}
+                            </TextAtom>
+                        </motion.div>
+                        <motion.div variants={itemVariants}>
+                            <TextAtom variant="p" className="carousel-description">
+                            {image.description}
+                            </TextAtom>
+                        </motion.div>
+                        <motion.button 
+                            className="carousel-btn"
+                            variants={itemVariants}
+                        >
+                            Ver Colección
+                        </motion.button>
+                        </motion.div>
                     </div>
-
-                    {/* Botones de navegación */}
-                    <button className="carousel-btn prev" onClick={prevSlide}>
-                        ‹
-                    </button>
-                    <button className="carousel-btn next" onClick={nextSlide}>
-                        ›
-                    </button>
-
-                    {/* Indicadores */}
-                    <div className="carousel-indicators">
-                        {carouselImages.map((_, index) => (
-                            <button
-                                key={index}
-                                className={`indicator ${index === currentSlide ? 'active' : ''}`}
-                                onClick={() => goToSlide(index)}
-                            />
-                        ))}
-                    </div>
+                    ))}
                 </div>
 
+                {/* El resto sin cambios */}
+                <button className="carousel-btn prev" onClick={prevSlide}>
+                    ‹
+                </button>
+                <button className="carousel-btn next" onClick={nextSlide}>
+                    ›
+                </button>
+
+                <div className="carousel-indicators">
+                    {carouselImages.map((_, index) => (
+                    <button
+                        key={index}
+                        className={`indicator ${index === currentSlide ? 'active' : ''}`}
+                        onClick={() => goToSlide(index)}
+                    />
+                    ))}
+                </div>
+                </motion.div>
 
                 {/* 
                 <div className="productos-grid">
