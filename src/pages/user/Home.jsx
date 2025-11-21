@@ -2,13 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import TextAtom from '../../components/atoms/TextAtom';
+import carouselImages from '../../data/image/image';
+import '../../style/pages/Home.css'
 
 const Home = () => {
     const [productos, setProductos] = useState([]);
     const [setLoading] = useState(true);
-    
+    const [currentSlide, setCurrentSlide] = useState(0);
+
     useEffect(() => {
         fetchProductos();
+        
+        // Auto-play para el carousel
+        const interval = setInterval(() => {
+            setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
+        }, 5000);
+        
+        return () => clearInterval(interval);
     }, []);
 
     const fetchProductos = () => {
@@ -25,161 +35,207 @@ const Home = () => {
         return (precio * (1 - descuento / 100)).toFixed(2);
     };
 
+    const nextSlide = () => {
+        setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
+    };
+
+    const prevSlide = () => {
+        setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length);
+    };
+
+    const goToSlide = (index) => {
+        setCurrentSlide(index);
+    };
 
     return (
-        <div className="home-container">
-            <div className="home-header">
-                <TextAtom variant="h1" className="home-title">
-                    ZapaStore
-                </TextAtom>
-                <TextAtom variant="p" className="home-subtitle">
-                    Encuentra los Mejores Zapatos
-                </TextAtom>
-            </div>
+        <main>
+            <div className="home">
+                {/* Carousel de imágenes */}
+                <div className="carousel">
+                    <div className="carousel-inner">
+                        {carouselImages.map((image, index) => (
+                            <div 
+                                key={index}
+                                className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
+                            >
+                                <img 
+                                    src={image.src} 
+                                    alt={image.alt}
+                                    className="carousel-image"
+                                />
+                                <div className="carousel-content">
+                                    <TextAtom variant="h2" className="carousel-title">
+                                        {image.title}
+                                    </TextAtom>
+                                    <TextAtom variant="p" className="carousel-description">
+                                        {image.description}
+                                    </TextAtom>
+                                    <button className="carousel-btn">
+                                        Ver Colección
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
 
-            <div className="productos-grid">
-                {productos.map(producto => (
-                    <div key={producto.idProducto} className="producto-card">
-                        {/* imagen del producto */}
-                        <div className="producto-imagen-container">
-                            <img 
-                                src={producto.imgPrincipal} 
-                                alt={producto.nombre}
-                                className="producto-imagen"
+                    {/* Botones de navegación */}
+                    <button className="carousel-btn prev" onClick={prevSlide}>
+                        ‹
+                    </button>
+                    <button className="carousel-btn next" onClick={nextSlide}>
+                        ›
+                    </button>
+
+                    {/* Indicadores */}
+                    <div className="carousel-indicators">
+                        {carouselImages.map((_, index) => (
+                            <button
+                                key={index}
+                                className={`indicator ${index === currentSlide ? 'active' : ''}`}
+                                onClick={() => goToSlide(index)}
                             />
-                        </div>
+                        ))}
+                    </div>
+                </div>
 
-                        {/* informacion del producto */}
-                        <div className="producto-info">
-                            {/* nombre */}
-                            <TextAtom variant="h3" className="producto-nombre">
-                                {producto.nombre}
-                            </TextAtom>
 
-                            {/* descripcion */}
-                            <TextAtom variant="p" className="producto-descripcion">
-                                {producto.descripcion}
-                            </TextAtom>
+                {/* 
+                <div className="productos-grid">
+                    {productos.map(producto => (
+                        <div key={producto.idProducto} className="producto-card">
+                            <div className="producto-imagen-container">
+                                <img 
+                                    src={producto.imgPrincipal} 
+                                    alt={producto.nombre}
+                                    className="producto-imagen"
+                                />
+                            </div>
 
-                            {/* precio */}
-                            <div className="producto-precio-container">
-                                {producto.descuento > 0 ? (
-                                    <>
-                                        <TextAtom variant="span" className="producto-precio-descuento">
-                                            ${calcularPrecioConDescuento(producto.precio, producto.descuento)}
-                                        </TextAtom>
-                                        <TextAtom variant="span" className="producto-precio-original">
+                            <div className="producto-info">
+                                <TextAtom variant="h3" className="producto-nombre">
+                                    {producto.nombre}
+                                </TextAtom>
+
+                                <TextAtom variant="p" className="producto-descripcion">
+                                    {producto.descripcion}
+                                </TextAtom>
+
+                                <div className="producto-precio-container">
+                                    {producto.descuento > 0 ? (
+                                        <>
+                                            <TextAtom variant="span" className="producto-precio-descuento">
+                                                ${calcularPrecioConDescuento(producto.precio, producto.descuento)}
+                                            </TextAtom>
+                                            <TextAtom variant="span" className="producto-precio-original">
+                                                ${producto.precio}
+                                            </TextAtom>
+                                            <TextAtom variant="span" className="producto-descuento-tag">
+                                                -{producto.descuento}%
+                                            </TextAtom>
+                                        </>
+                                    ) : (
+                                        <TextAtom variant="span" className="producto-precio-normal">
                                             ${producto.precio}
                                         </TextAtom>
-                                        <TextAtom variant="span" className="producto-descuento-tag">
-                                            -{producto.descuento}%
-                                        </TextAtom>
-                                    </>
-                                ) : (
-                                    <TextAtom variant="span" className="producto-precio-normal">
-                                        ${producto.precio}
-                                    </TextAtom>
-                                )}
-                            </div>
-
-                            {/* caracteristicas */}
-                            <div className="producto-caracteristicas">
-                                {producto.marca && (
-                                    <div className="caracteristica-item">
-                                        <TextAtom variant="span" className="caracteristica-label">
-                                            Marca:
-                                        </TextAtom>
-                                        <TextAtom variant="span" className="caracteristica-valor">
-                                            {producto.marca.nombre}
-                                        </TextAtom>
-                                    </div>
-                                )}
-                                
-                                {producto.genero && (
-                                    <div className="caracteristica-item">
-                                        <TextAtom variant="span" className="caracteristica-label">
-                                            Género:
-                                        </TextAtom>
-                                        <TextAtom variant="span" className="caracteristica-valor">
-                                            {producto.genero.nombre}
-                                        </TextAtom>
-                                    </div>
-                                )}
-
-                                {/* stock */}
-                                <div className="caracteristica-item">
-                                    <TextAtom variant="span" className="caracteristica-label">
-                                        Stock:
-                                    </TextAtom>
-                                    <TextAtom 
-                                        variant="span" 
-                                        className={`caracteristica-valor ${
-                                            producto.stock > 0 ? 'stock-disponible' : 'stock-agotado'
-                                        }`}
-                                    >
-                                        {producto.stock > 0 ? `${producto.stock} disponibles` : 'Agotado'}
-                                    </TextAtom>
+                                    )}
                                 </div>
 
-                                {/* eco-friendly */}
-                                {producto.ecofriendly && (
+                                <div className="producto-caracteristicas">
+                                    {producto.marca && (
+                                        <div className="caracteristica-item">
+                                            <TextAtom variant="span" className="caracteristica-label">
+                                                Marca:
+                                            </TextAtom>
+                                            <TextAtom variant="span" className="caracteristica-valor">
+                                                {producto.marca.nombre}
+                                            </TextAtom>
+                                        </div>
+                                    )}
+                                    
+                                    {producto.genero && (
+                                        <div className="caracteristica-item">
+                                            <TextAtom variant="span" className="caracteristica-label">
+                                                Género:
+                                            </TextAtom>
+                                            <TextAtom variant="span" className="caracteristica-valor">
+                                                {producto.genero.nombre}
+                                            </TextAtom>
+                                        </div>
+                                    )}
+
                                     <div className="caracteristica-item">
                                         <TextAtom variant="span" className="caracteristica-label">
-                                            Eco:
+                                            Stock:
                                         </TextAtom>
-                                        <TextAtom variant="span" className="caracteristica-valor eco-friendly">
-                                            Friendly
+                                        <TextAtom 
+                                            variant="span" 
+                                            className={`caracteristica-valor ${
+                                                producto.stock > 0 ? 'stock-disponible' : 'stock-agotado'
+                                            }`}
+                                        >
+                                            {producto.stock > 0 ? `${producto.stock} disponibles` : 'Agotado'}
                                         </TextAtom>
                                     </div>
-                                )}
-                            </div>
 
-                            {/* botones */}
-                            <div className="producto-botones">
-                                <button 
-                                    className={`btn-agregar-carrito ${
-                                        producto.stock > 0 ? 'btn-disponible' : 'btn-agotado'
-                                    }`}
-                                    disabled={producto.stock === 0}
-                                >
-                                    <TextAtom variant="span">
-                                        {producto.stock > 0 ? 'Agregar al Carrito' : 'Agotado'}
-                                    </TextAtom>
-                                </button>
-                                
-                                <Link 
-                                    to={`/producto/${producto.idProducto}`}
-                                    className="btn-ver-detalles"
-                                >
-                                    <TextAtom variant="span">
-                                        Ver
-                                    </TextAtom>
-                                </Link>
+                                    {producto.ecofriendly && (
+                                        <div className="caracteristica-item">
+                                            <TextAtom variant="span" className="caracteristica-label">
+                                                Eco:
+                                            </TextAtom>
+                                            <TextAtom variant="span" className="caracteristica-valor eco-friendly">
+                                                Friendly
+                                            </TextAtom>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="producto-botones">
+                                    <button 
+                                        className={`btn-agregar-carrito ${
+                                            producto.stock > 0 ? 'btn-disponible' : 'btn-agotado'
+                                        }`}
+                                        disabled={producto.stock === 0}
+                                    >
+                                        <TextAtom variant="span">
+                                            {producto.stock > 0 ? 'Agregar al Carrito' : 'Agotado'}
+                                        </TextAtom>
+                                    </button>
+                                    
+                                    <Link 
+                                        to={`/producto/${producto.idProducto}`}
+                                        className="btn-ver-detalles"
+                                    >
+                                        <TextAtom variant="span">
+                                            Ver
+                                        </TextAtom>
+                                    </Link>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
 
-            {/* mensaje si no hay productos */}
-            {productos.length === 0 && (
-                <div className="no-productos">
-                    <TextAtom variant="h3" className="no-productos-title">
-                        No hay productos disponibles
-                    </TextAtom>
-                    <TextAtom variant="p" className="no-productos-text">
-                        Pronto agregaremos nuevos productos a nuestra tienda.
+                {productos.length === 0 && (
+                    <div className="no-productos">
+                        <TextAtom variant="h3" className="no-productos-title">
+                            No hay productos disponibles
+                        </TextAtom>
+                        <TextAtom variant="p" className="no-productos-text">
+                            Pronto agregaremos nuevos productos a nuestra tienda.
+                        </TextAtom>
+                    </div>
+                )}
+
+                <div className="productos-contador">
+                    <TextAtom variant="p" className="contador-text">
+                        Mostrando {productos.length} producto{productos.length !== 1 ? 's' : ''}
                     </TextAtom>
                 </div>
-            )}
-
-            {/* contador de productos */}
-            <div className="productos-contador">
-                <TextAtom variant="p" className="contador-text">
-                    Mostrando {productos.length} producto{productos.length !== 1 ? 's' : ''}
-                </TextAtom>
+                */}
+                
+        
             </div>
-        </div>
+        </main>
     );
 };
 
