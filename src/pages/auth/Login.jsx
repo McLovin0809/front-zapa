@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Forms from "../../components/templates/Forms";
 import { loginData } from "./AuthData/AuthData";
-import UsuarioService from "../../services/usuarioService";
+import usuarioService from "../../services/usuarioService";
 import "../../style/pages/AuthPanel.css";
 
 export default function Login() {
@@ -19,7 +19,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await UsuarioService.login(form);
+      const { data } = await usuarioService.login(form);
       localStorage.setItem("user", JSON.stringify(data));
       navigate("/");
     } catch (error) {
