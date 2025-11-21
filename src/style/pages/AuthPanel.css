@@ -1,0 +1,140 @@
+.auth-panel-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: white;
+  padding: 2rem;
+}
+
+.auth-panel-container {
+  display: flex;
+  width: 900px;
+  height: 600px;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #f9f9f9;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+}
+
+.auth-side-panel {
+  width: 40%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #333;
+}
+
+.auth-side-content {
+  text-align: center;
+}
+
+.auth-side-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.auth-side-content p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.auth-toggle-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-toggle-button:hover {
+  background-color: #555;
+}
+
+.auth-form-panel {
+  width: 60%;
+  background: white;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-form-wrapper {
+  width: 100%;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+  color: #333;
+}
+
+.auth-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  background: transparent;
+  color: #333;
+  font-size: 1rem;
+}
+
+.auth-input::placeholder {
+  color: #999;
+}
+
+.auth-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #555;
+}
+
+.auth-link {
+  display: block;
+  text-align: center;
+  margin-top: 1rem;
+  color: #666;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .auth-panel-container {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+  }
+
+  .auth-side-panel,
+  .auth-form-panel {
+    width: 100%;
+    padding: 1.5rem;
+  }
+}
