@@ -165,7 +165,7 @@ const AdminHome = () => {
                     <p className="admin-subtitle">Gestión completa de la tienda</p>
                 </div>
                 <div className="admin-buttons">
-                    <Link to="/admin/products/new" className="admin-btn primary">
+                    <Link to="/admin/AddProduct" className="admin-btn primary">
                         + Nuevo Producto
                     </Link>
                     <button className="admin-btn secondary" onClick={() => { fetchProductos(); fetchUsuarios(); }}>
@@ -223,7 +223,7 @@ const AdminHome = () => {
                     <div className="products-tab">
                         <div className="table-header">
                             <h3>Gestión de Productos</h3>
-                            <Link to="/admin/products/new" className="admin-btn primary small">
+                            <Link to="/admin/AddProduct" className="admin-btn primary small">
                                 + Agregar Producto
                             </Link>
                         </div>
@@ -440,20 +440,6 @@ const AdminHome = () => {
                                         <span>Total productos:</span>
                                         <strong>{stats.totalProductos}</strong>
                                     </div>
-                                    <div className="stat-item">
-                                        <span>Bajo stock (10 unidades):</span>
-                                        <strong className="warning">{stats.productosBajoStock}</strong>
-                                    </div>
-                                    <div className="stat-item">
-                                        <span>Con descuento:</span>
-                                        <strong className="discount">{stats.productosConDescuento}</strong>
-                                    </div>
-                                    <div className="stat-item">
-                                        <span>Agotados:</span>
-                                        <strong className="danger">
-                                            {productos.filter(p => p.stock === 0).length}
-                                        </strong>
-                                    </div>
                                 </div>
                             </div>
 
@@ -463,20 +449,6 @@ const AdminHome = () => {
                                     <div className="stat-item">
                                         <span>Total usuarios:</span>
                                         <strong>{stats.totalUsuarios}</strong>
-                                    </div>
-                                    <div className="stat-item">
-                                        <span>Usuarios activos:</span>
-                                        <strong className="success">{stats.usuariosActivos}</strong>
-                                    </div>
-                                    <div className="stat-item">
-                                        <span>Administradores:</span>
-                                        <strong className="admin">{stats.administradores}</strong>
-                                    </div>
-                                    <div className="stat-item">
-                                        <span>Usuarios inactivos:</span>
-                                        <strong className="danger">
-                                            {usuarios.filter(u => u.activo === false).length}
-                                        </strong>
                                     </div>
                                 </div>
                             </div>

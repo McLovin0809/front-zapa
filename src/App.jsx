@@ -21,6 +21,7 @@ function App() {
         <Route path="/register" element={<AuthPanel />} />
         <Route path="/perfil" element={<PerfilUsuario />} />
         <Route path="/Admin/HomeAdmin" element={<HomeAdmin />} />
+        <Route path="/admin/AddProduct" element={<AddProduct />} />
       </Routes>
     </>
   );
