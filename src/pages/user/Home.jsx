@@ -181,6 +181,7 @@ const Home = () => {
           </TextAtom>
         </div>
       </div>
+      <Footer/>
     </main>
   );
 };

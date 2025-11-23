@@ -34,13 +34,23 @@ const Login = () => {
 
       generarMensaje("Login exitoso", "success");
       login(response.data);
-      setTimeout(() => navigate("/"), 800);
+
+      const userEmail = response.data.email;
+      if (userEmail && userEmail.toLowerCase().includes("admin")) {
+        setTimeout(() => navigate("/Admin/HomeAdmin"), 800);
+      } else {
+        setTimeout(() => navigate("/"), 800);
+      }
     } catch (error) {
       console.error("Error en login:", error.response?.data);
-      const msg =
-        error.response?.data?.message ||
-        "Credenciales inválidas. Verifica tu email y contraseña.";
-      generarMensaje(msg, "error");
+
+      if (error.response?.status === 404 || error.response?.data?.message === "Usuario no encontrado") {
+        generarMensaje("El usuario no existe. Verifica tu correo.", "error");
+      } else if (error.response?.status === 401) {
+        generarMensaje("Credenciales inválidas. Verifica tu email y contraseña.", "error");
+      } else {
+        generarMensaje("Error al iniciar sesión. Intenta nuevamente.", "error");
+      }
     } finally {
       setLoading(false);
     }

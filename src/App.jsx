@@ -5,6 +5,7 @@ import Navbar from './components/organisms/Navbar';
 import Home from './pages/user/Home';
 import HomeAdmin from './pages/admin/HomeAdmin';
 import AuthPanel from './pages/auth/AuthPanel';
+import "./style/components/toast.css";
 
 
 function App() {
