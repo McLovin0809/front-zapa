@@ -6,6 +6,7 @@ import Home from './pages/user/Home';
 import HomeAdmin from './pages/admin/HomeAdmin';
 import AddProduct from "./pages/admin/AddProduct";
 import AuthPanel from './pages/auth/AuthPanel';
+import "./style/components/toast.css";
 
 
 function App() {
