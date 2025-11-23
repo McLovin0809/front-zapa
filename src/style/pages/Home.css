@@ -1,4 +1,3 @@
-/* Carousel Styles */
 .carousel {
     position: relative;
     width: 100%;
@@ -46,8 +45,8 @@
 .carousel-image {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Esto hace que la imagen cubra todo el espacio */
-    object-position: center; /* Centra la imagen */
+    object-fit: cover; 
+    object-position: center; 
 }
 
 .carousel-content {
@@ -148,7 +147,6 @@
     background: white;
 }
 
-/* Overlay para mejor legibilidad del texto */
 .carousel-slide::after {
     content: '';
     position: absolute;
@@ -203,6 +201,6 @@
     }
     
     .carousel-image {
-        object-position: center 30%; /* Ajusta la posición vertical en móviles */
+        object-position: center 30%;
     }
 }

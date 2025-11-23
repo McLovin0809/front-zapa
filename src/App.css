@@ -1,8 +1,32 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #222423;
+  color: #fffdf4;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #222423;
+  color: #fffdf4;
+}
+
+main {
+  background-color: #222423;
+  color: #fffdf4;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.footer {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .logo {

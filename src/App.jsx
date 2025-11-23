@@ -10,7 +10,6 @@ function App() {
       <Navbar links={publicLinks} title="ZAPA STORE" />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* Login y Register usan el mismo AuthPanel */}
         <Route path="/login" element={<AuthPanel />} />
         <Route path="/register" element={<AuthPanel />} />
       </Routes>
