@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 import Forms from "../../components/templates/Forms";
-import { loginData } from "./AuthData/AuthData";
-import usuarioService from "../../services/UsuarioService";
+import { generarMensaje } from "../../utils/GenerarMensaje";
+import UsuarioService from "../../services/UsuarioService";
+import { AuthContext } from "../../context/AuthContext";
 import "../../style/pages/AuthPanel.css";
 
-export default function Login() {
+const Login = () => {
   const [form, setForm] = useState({ email: "", clave: "" });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,51 +18,83 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!form.email || !form.clave) {
+      generarMensaje("Completa todos los campos", "warning");
+      return;
+    }
+
     setLoading(true);
+
     try {
-      const { data } = await usuarioService.login(form);
-      localStorage.setItem("user", JSON.stringify(data));
-      navigate("/");
+      const response = await UsuarioService.login({
+        email: form.email,
+        clave: form.clave,
+      });
+
+      generarMensaje("Login exitoso", "success");
+      login(response.data);
+      setTimeout(() => navigate("/"), 800);
     } catch (error) {
-      alert(error.response?.data?.message || "Error en autenticación");
+      console.error("Error en login:", error.response?.data);
+      const msg =
+        error.response?.data?.message ||
+        "Credenciales inválidas. Verifica tu email y contraseña.";
+      generarMensaje(msg, "error");
     } finally {
       setLoading(false);
     }
   };
 
-  const formDataWithHandlers = loginData.map((item) => {
-    if (item.type === "inputs") {
-      return {
-        ...item,
-        inputs: item.inputs.map((input) => ({
-          ...input,
-          value: form[input.name],
+  const loginData = [
+    {
+      type: "text",
+      text: [{ content: "Iniciar sesión", variant: "h1", className: "auth-title" }],
+    },
+    {
+      type: "inputs",
+      inputs: [
+        {
+          type: "email",
+          placeholder: "Correo electrónico",
+          name: "email",
+          value: form.email,
           onChange: handleChange,
-        })),
-      };
-    }
-    if (item.type === "button") {
-      return {
-        ...item,
-        onClick: handleSubmit,
-        disabled: loading,
-        text: loading ? "Iniciando..." : item.text,
-      };
-    }
-    return item;
-  });
+          required: true,
+          autoComplete: "email",
+          className: "auth-input",
+        },
+        {
+          type: "password",
+          placeholder: "Contraseña",
+          name: "clave",
+          value: form.clave,
+          onChange: handleChange,
+          required: true,
+          autoComplete: "current-password",
+          className: "auth-input",
+        },
+      ],
+      className: "auth-inputs",
+    },
+    {
+      type: "button",
+      text: loading ? "Ingresando..." : "Iniciar sesión",
+      onClick: handleSubmit,
+      disabled: loading,
+      className: loading ? "auth-button loading" : "auth-button",
+    },
+  ];
 
   return (
-    <main className="auth-page">
-      <motion.form
-        onSubmit={handleSubmit}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="auth-form"
-      >
-        <Forms content={formDataWithHandlers} />
-      </motion.form>
-    </main>
+    <div className="auth-page">
+      <main className="auth-container">
+        <form onSubmit={handleSubmit} className="auth-form">
+          <Forms content={loginData} />
+        </form>
+      </main>
+    </div>
   );
-}
+};
+
+export default Login;
