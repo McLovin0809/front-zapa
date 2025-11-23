@@ -1,10 +1,6 @@
 import axios from 'axios';
 
-<<<<<<< HEAD
 const BASE_URL = "https://backend-zapa.onrender.com/api/usuarios";
-=======
-const BASE_URL = 'https://backend-zapa.onrender.com/api/usuarios'; 
->>>>>>> 29a4d67ab92f48b29f0bef22bedf7b45bc727dd0
 
 class UsuarioService {
     // Obtener todos los usuarios

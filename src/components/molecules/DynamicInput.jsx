@@ -7,15 +7,8 @@ function DynamicInputs({ Inputs = [], className = "" }) {
         {Inputs.map((input, index) => (
             <div className={className} key={index}>
             <InputAtom
-                type={input.type || "text"}
-                placeholder={input.placeholder}
-                name={input.name}
-                value={input.value}
-                onChange={input.onChange}
-                required={input.required}
-                autoComplete={input.autoComplete}
-                disabled={input.disabled}
-                className={input.className}
+                type={input.type || "text"} placeholder={input.placeholder} name={input.name} value={input.value}
+                onChange={input.onChange} required={input.required} autoComplete={input.autoComplete} disabled={input.disabled}className={input.className}
             />
             </div>
         ))}
