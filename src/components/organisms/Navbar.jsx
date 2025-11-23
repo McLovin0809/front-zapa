@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { navVariants, itemVariants } from '../../animations/navbarAnimation';
 import "../../style/components/Navbar.css"
 
-function Navbar({ links, title }) {
+function Navbar({ links }) {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 

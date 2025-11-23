@@ -114,7 +114,7 @@ const Home = () => {
                 </div>
                 </motion.div>
 
-                {/* 
+                
                 <div className="productos-grid">
                     {productos.map(producto => (
                         <div key={producto.idProducto} className="producto-card">
@@ -246,8 +246,6 @@ const Home = () => {
                         Mostrando {productos.length} producto{productos.length !== 1 ? 's' : ''}
                     </TextAtom>
                 </div>
-                */}
-                
         
             </div>
         </main>
