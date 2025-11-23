@@ -4,6 +4,7 @@ import { adminLinks } from './data/navbarAdminLinks';
 import Navbar from './components/organisms/Navbar';
 import Home from './pages/user/Home';
 import HomeAdmin from './pages/admin/HomeAdmin';
+import AddProduct from "./pages/admin/AddProduct";
 import AuthPanel from './pages/auth/AuthPanel';
 
 
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<AuthPanel />} />
         <Route path="/register" element={<AuthPanel />} />
         <Route path="/Admin/HomeAdmin" element={<HomeAdmin />} />
+        <Route path="/admin/AddProduct" element={<AddProduct />} />
       </Routes>
     </>
   );
