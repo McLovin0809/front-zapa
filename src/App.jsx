@@ -6,6 +6,7 @@ import Contact from "./pages/user/Contact";
 import HomeAdmin from "./pages/admin/HomeAdmin";
 import PerfilUsuario from "./pages/user/PerfilUsuario";
 import AuthPanel from "./pages/auth/AuthPanel";
+import AddProduct from "./pages/admin/AddProduct";
 import "./style/components/Toast.css";
 import About from "./pages/user/About";
 
