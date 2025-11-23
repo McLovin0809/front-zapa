@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import TextAtom from '../../components/atoms/TextAtom';
 import carouselImages from '../../data/image/image';
+import Footer from '../../components/organisms/Footer';
 import { motion } from 'framer-motion';
 import { carouselVariants, itemVariants } from '../../animations/carouselAnimations';
 import '../../style/pages/Home.css'
@@ -248,6 +249,7 @@ const Home = () => {
                 </div>
         
             </div>
+            <Footer/>
         </main>
     );
 };

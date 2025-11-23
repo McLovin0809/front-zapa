@@ -1,34 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Login from "./Login";
-import Register from "./Register";
+import CreateUser from "./CreateUser";
 import "../../style/pages/AuthPanel.css";
 
 export default function AuthPanel() {
-  const location = useLocation();
   const navigate = useNavigate();
-  const [isRegistering, setIsRegistering] = useState(false);
+  const location = useLocation();
+  const isRegistering = location.pathname === "/register";
 
-  // Detecta la ruta actual y ajusta el estado
-  useEffect(() => {
-    if (location.pathname === "/register") {
-      setIsRegistering(true);
-    } else {
-      setIsRegistering(false);
-    }
-  }, [location.pathname]);
-
-  // Cambia estado y URL al mismo tiempo
-  const handleToggle = () => {
-    const nextPath = isRegistering ? "/login" : "/register";
-    navigate(nextPath);
-    setIsRegistering(!isRegistering);
+  const toggleRoute = () => {
+    navigate(isRegistering ? "/login" : "/register");
   };
 
   return (
     <div className="auth-panel-wrapper">
       <div className="auth-panel-container">
+        {/* Panel lateral */}
         <div className="auth-side-panel">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -37,12 +26,14 @@ export default function AuthPanel() {
             className="auth-side-content"
           >
             <h2>{isRegistering ? "¡Hola de nuevo!" : "¡Bienvenido!"}</h2>
-            <button className="auth-toggle-button" onClick={handleToggle}>
+            <p>{isRegistering ? "¿Ya tienes cuenta?" : "¿No tienes cuenta aún?"}</p>
+            <button className="auth-toggle-button" onClick={toggleRoute}>
               {isRegistering ? "Iniciar sesión" : "Registrarse"}
             </button>
           </motion.div>
         </div>
 
+        {/* Panel de formulario */}
         <div className="auth-form-panel">
           <AnimatePresence mode="wait">
             {isRegistering ? (
@@ -54,8 +45,8 @@ export default function AuthPanel() {
                 transition={{ duration: 0.5 }}
                 className="auth-form-wrapper"
               >
-                <Register />
-                <button className="auth-link" onClick={handleToggle}>
+                <CreateUser />
+                <button className="auth-link" onClick={toggleRoute}>
                   ¿Ya tienes cuenta? Inicia sesión
                 </button>
               </motion.div>
@@ -69,7 +60,7 @@ export default function AuthPanel() {
                 className="auth-form-wrapper"
               >
                 <Login />
-                <button className="auth-link" onClick={handleToggle}>
+                <button className="auth-link" onClick={toggleRoute}>
                   ¿No tienes cuenta? Regístrate
                 </button>
               </motion.div>
