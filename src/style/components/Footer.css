@@ -6,6 +6,8 @@
   border-top: none;
 }
 
+
+/* COLUMNAS */
 .footer-columns {
   display: flex;
   flex-wrap: wrap;
@@ -28,6 +30,9 @@
   font-weight: bold;
   color: #fffdf4;
 }
+
+
+/* LINKS */
 
 .footer-column ul {
   list-style: none;
@@ -54,6 +59,7 @@
   color: #222423;
 }
 
+/* REDES SOCIALES */
 .social-icons {
   display: flex;
   justify-content: center;
@@ -63,30 +69,51 @@
 }
 
 .social-icons a {
-  font-weight: bold;
-  font-size: 0.9rem;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ICONOS REACT (Instagram / Facebook) */
+.social-icons svg {
+  font-size: 1.4rem;
   color: #fffdf4;
   transition: all 0.3s ease;
-  padding: 2px 6px;
-  border-radius: 6px;
 }
 
 .social-icons a:hover {
   background-color: #fffdf4;
+}
+
+.social-icons a:hover svg {
   color: #222423;
 }
 
+
+/* MÉTODOS DE PAGO */
 .payment-logos {
   margin-top: 1rem;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 1rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #fffdf4;
 }
 
+.payment-logos svg {
+  font-size: 2rem;
+  color: #fffdf4;
+  transition: all 0.3s ease;
+}
+
+.payment-logos svg:hover {
+  color: #222423;
+}
+
+
+/* FOOTER BOTTOM */
 .footer-bottom {
   text-align: center;
   margin-top: 2rem;
@@ -94,12 +121,11 @@
   color: #fffdf4;
 }
 
+
+/* RESET EXTRA (evita conflictos) */
 .footer,
 .footer * {
   border: none !important;
   box-shadow: none !important;
   outline: none !important;
-  background-color: #222423 !important;
-  color: #fffdf4 !important;
 }
-
