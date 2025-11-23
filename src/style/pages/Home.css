@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-/* Home.css */
 
-/* Carrusel (tus estilos exactos) */
-=======
->>>>>>> 29a4d67ab92f48b29f0bef22bedf7b45bc727dd0
 .carousel {
     position: relative;
     width: 100%;
@@ -51,13 +46,10 @@
 .carousel-image {
     width: 100%;
     height: 100%;
-<<<<<<< HEAD
     object-fit: cover;
     object-position: center;
-=======
     object-fit: cover; 
     object-position: center; 
->>>>>>> 29a4d67ab92f48b29f0bef22bedf7b45bc727dd0
 }
 
 .carousel-content {

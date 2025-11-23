@@ -4,15 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { navVariants, itemVariants } from '../../animations/navbarAnimation';
 import "../../style/components/Navbar.css";
 
-<<<<<<< HEAD
-function Navbar({ links }) {
-    const [isOpen, setIsOpen] = useState(false);
-    const navigate = useNavigate();
-=======
 function Navbar({ links, title }) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
->>>>>>> 29a4d67ab92f48b29f0bef22bedf7b45bc727dd0
 
   const handleLogout = () => {
     localStorage.removeItem('token');
