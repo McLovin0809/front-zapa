@@ -108,7 +108,7 @@ const CreateUser = () => {
       type: "inputs",
       inputs: [
         { type: "text", placeholder: "Nombre completo", name: "nombre", value: form.nombre, onChange: handleChange, required: true, autoComplete: "name", className: "auth-input" },
-        { type: "email", placeholder: "Correo electrónico (ej: usuario@admin.com o usuario@cliente.com)", name: "email", value: form.email, onChange: handleChange, required: true, autoComplete: "email", className: "auth-input" },
+        { type: "email", placeholder: "Correo electrónico (@admin o @cliente))", name: "email", value: form.email, onChange: handleChange, required: true, autoComplete: "email", className: "auth-input" },
         { type: "password", placeholder: "Contraseña", name: "clave", value: form.clave, onChange: handleChange, required: true, autoComplete: "new-password", className: "auth-input" },
         { type: "text", placeholder: "Teléfono (opcional)", name: "telefono", value: form.telefono, onChange: handleChange, autoComplete: "tel", className: "auth-input" },
         { type: "text", placeholder: "Calle", name: "direccion.calle", value: form.direccion.calle, onChange: handleChange, required: true, className: "auth-input" },
