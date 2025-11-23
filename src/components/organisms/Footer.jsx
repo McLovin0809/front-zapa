@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="footer-column">
           <h4>Centro de ayuda</h4>
           <ul>
-            <li><Link to="/contacto">Contacto</Link></li>
+            <li><Link to="/contact">Contacto</Link></li>
           </ul>
         </div>
 

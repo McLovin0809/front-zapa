@@ -1,0 +1,80 @@
+.perfil-page {
+  background-color: #ffff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+}
+
+.perfil-card {
+  background: #f5f5eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 500px;
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
+.perfil-header {
+  margin-bottom: 2rem;
+}
+
+.perfil-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  border: 3px solid #222423;
+}
+
+.perfil-email {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.perfil-info {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.perfil-info h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.5rem;
+}
+
+.perfil-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.perfil-info li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.perfil-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.perfil-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.perfil-btn.logout {
+  background-color: #222423;
+  color: #fffdf4;
+}
+
+.perfil-btn.logout:hover {
+  background-color: #444;
+}
