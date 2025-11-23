@@ -1,11 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {
+  FaInstagram,
+  FaFacebook,
+  FaCcVisa,
+  FaCcMastercard,
+  FaMoneyBillWave
+} from "react-icons/fa";
 import "../../style/components/Footer.css";
 
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-columns">
+
         {/* Centro de ayuda */}
         <div className="footer-column">
           <h4>Centro de ayuda</h4>
@@ -25,22 +33,32 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Redes y pagos */}
+        {/* Redes Sociales y Métodos de Pago */}
         <div className="footer-column">
           <h4>Redes Sociales</h4>
           <div className="social-icons">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram />
+            </a>
+
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebook />
+            </a>
           </div>
-        <div className="footer-column">
-            <h4>Metodos de pago</h4>
-        </div>
+
+          <h4>Métodos de Pago</h4>
           <div className="payment-logos">
-            
-            <span>Visa</span>
-            <span>MasterCard</span>
-            <span>Redcompra</span>
-            <span>Mercado Pago</span>
+            <FaCcVisa />
+            <FaCcMastercard />
+            <FaMoneyBillWave /> {/* Ícono general para Redcompra / MercadoPago */}
           </div>
         </div>
       </div>
