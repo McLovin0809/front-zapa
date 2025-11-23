@@ -2,15 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import UsuarioService from '../../services/UsuarioService';
-import Section from '../../components/templates/Section';
 import TextAtom from '../../components/atoms/TextAtom';
-
-import { headerData } from '../../data/admin/headerData';
-import { getStatsData } from '../../data/admin/statsData';
-import { getProductsData } from '../../data/admin/productsData';
-import { getTabsData } from '../../data/admin/tabsData';
-
-import '../../style/pages/HomeAdmin.css'
+import '../../style/pages/HomeAdmin.css';
 
 const AdminHome = () => {
     const [activeTab, setActiveTab] = useState('productos');
@@ -20,7 +13,11 @@ const AdminHome = () => {
     const [userLoading, setUserLoading] = useState(false);
     const [stats, setStats] = useState({
         totalProductos: 0,
-        totalUsuarios: 0
+        totalUsuarios: 0,
+        productosBajoStock: 0,
+        productosConDescuento: 0,
+        usuariosActivos: 0,
+        administradores: 0
     });
 
     useEffect(() => {
@@ -56,9 +53,15 @@ const AdminHome = () => {
     };
 
     const calculateStats = () => {
+        const productosBajoStock = productos.filter(p => p.stock < 10).length;
+        const productosConDescuento = productos.filter(p => p.descuento > 0).length;
+        const usuariosActivos = usuarios.filter(u => u.activo !== false).length;
+        const administradores = usuarios.filter(u => u.rol && u.rol.id === 1).length;
+        
         setStats({
             totalProductos: productos.length,
-            totalUsuarios: usuarios.length
+            totalUsuarios: usuarios.length,
+            productosBajoStock,
         });
     };
 
@@ -93,6 +96,7 @@ const AdminHome = () => {
             };
             await UsuarioService.updateUsuarioParcial(usuario.idUsuario, nuevosDatos);
             
+            // Actualizar estado local
             setUsuarios(usuarios.map(u => 
                 u.idUsuario === usuario.idUsuario 
                     ? { ...u, activo: !usuario.activo }
@@ -111,6 +115,7 @@ const AdminHome = () => {
             };
             await UsuarioService.updateUsuarioParcial(usuario.idUsuario, nuevosDatos);
             
+            // Actualizar estado local
             setUsuarios(usuarios.map(u => 
                 u.idUsuario === usuario.idUsuario 
                     ? { ...u, rol: { ...u.rol, id: nuevoRolId } }
@@ -131,11 +136,16 @@ const AdminHome = () => {
         return new Date(dateString).toLocaleDateString('es-ES');
     };
 
-    // Obtener datos desde archivos externos
-    const headerContent = [headerData];
-    const statsContent = getStatsData(stats);
-    const productsContent = getProductsData(productos, calcularPrecioConDescuento);
-    const tabsData = getTabsData(productos, usuarios);
+    const getRolNombre = (rolId) => {
+        const roles = {
+            1: 'Administrador',
+            2: 'Empleado', 
+            3: 'Cliente',
+            4: 'Invitado',
+            5: 'Cliente' // Asumiendo que 5 también es cliente
+        };
+        return roles[rolId] || 'Cliente';
+    };
 
     if (loading) {
         return (
@@ -148,9 +158,12 @@ const AdminHome = () => {
 
     return (
         <div className="admin-page">
-            {/* header con section */}
+            {/* Header */}
             <div className="admin-header">
-                <Section content={headerContent} />
+                <div className="admin-title-section">
+                    <h1 className="admin-title">Panel de Administración</h1>
+                    <p className="admin-subtitle">Gestión completa de la tienda</p>
+                </div>
                 <div className="admin-buttons">
                     <Link to="/admin/products/new" className="admin-btn primary">
                         + Nuevo Producto
@@ -161,49 +174,163 @@ const AdminHome = () => {
                 </div>
             </div>
 
-            {/* estadisticas con section */}
-            <Section content={statsContent} />
+            {/* Estadísticas */}
+            <div className="stats-cards">
+                <div className="stat-card">
+                    <div className="stat-icon products">🛍️</div>
+                    <div className="stat-info">
+                        <h3 className="stat-number">{stats.totalProductos}</h3>
+                        <p className="stat-text">Total Productos</p>
+                    </div>
+                </div>
 
-            {/* navegacion por Pestañas */}
-            <div className="admin-tabs">
-                {tabsData.map(tab => (
-                    <button 
-                        key={tab.value}
-                        className={`tab-button ${activeTab === tab.value ? 'active' : ''}`}
-                        onClick={() => setActiveTab(tab.value)}
-                    >
-                        {tab.label} {tab.count !== null && `(${tab.count})`}
-                    </button>
-                ))}
+                <div className="stat-card">
+                    <div className="stat-icon users">👥</div>
+                    <div className="stat-info">
+                        <h3 className="stat-number">{stats.totalUsuarios}</h3>
+                        <p className="stat-text">Usuarios Totales</p>
+                    </div>
+                </div>
+
             </div>
 
+            {/* Navegación por Pestañas */}
+            <div className="admin-tabs">
+                <button 
+                    className={`tab-button ${activeTab === 'productos' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('productos')}
+                >
+                    📦 Productos ({productos.length})
+                </button>
+                <button 
+                    className={`tab-button ${activeTab === 'usuarios' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('usuarios')}
+                >
+                    👥 Usuarios ({usuarios.length})
+                </button>
+                <button 
+                    className={`tab-button ${activeTab === 'estadisticas' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('estadisticas')}
+                >
+                    📊 Estadísticas
+                </button>
+            </div>
+
+            {/* Contenido de las Pestañas */}
             <div className="tab-content">
+                {/* Pestaña de Productos */}
                 {activeTab === 'productos' && (
                     <div className="products-tab">
-                        <Section content={productsContent} />
-                        
+                        <div className="table-header">
+                            <h3>Gestión de Productos</h3>
+                            <Link to="/admin/products/new" className="admin-btn primary small">
+                                + Agregar Producto
+                            </Link>
+                        </div>
+                        <div className="table-container">
+                            <table className="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Imagen</th>
+                                        <th>Nombre</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Descuento</th>
+                                        <th>Marca</th>
+                                        <th>Género</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {productos.map(producto => (
+                                        <tr key={producto.idProducto}>
+                                            <td>
+                                                <img 
+                                                    src={producto.imgPrincipal} 
+                                                    alt={producto.nombre}
+                                                    className="product-thumb"
+                                                />
+                                            </td>
+                                            <td>
+                                                <div className="product-name-cell">
+                                                    <strong>{producto.nombre}</strong>
+                                                    <small>{producto.descripcion}</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                ${producto.descuento > 0 ? 
+                                                    calcularPrecioConDescuento(producto.precio, producto.descuento) : 
+                                                    producto.precio
+                                                }
+                                                {producto.descuento > 0 && (
+                                                    <div className="original-price">
+                                                        ${producto.precio}
+                                                    </div>
+                                                )}
+                                            </td>
+                                            <td>
+                                                <span className={`stock-badge ${producto.stock < 10 ? 'low' : 'good'}`}>
+                                                    {producto.stock}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {producto.descuento > 0 ? (
+                                                    <span className="discount-badge">
+                                                        -{producto.descuento}%
+                                                    </span>
+                                                ) : (
+                                                    <span className="no-discount">-</span>
+                                                )}
+                                            </td>
+                                            <td>{producto.marca?.nombre || '-'}</td>
+                                            <td>{producto.genero?.nombre || '-'}</td>
+                                            <td>
+                                                <span className={`status-badge ${producto.stock > 0 ? 'active' : 'inactive'}`}>
+                                                    {producto.stock > 0 ? 'Activo' : 'Agotado'}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div className="action-buttons">
+                                                    <Link 
+                                                        to={`/admin/products/edit/${producto.idProducto}`}
+                                                        className="btn-action edit"
+                                                    >
+                                                        Editar
+                                                    </Link>
+                                                    <button 
+                                                        onClick={() => handleDeleteProducto(producto.idProducto)}
+                                                        className="btn-action delete"
+                                                    >
+                                                        Eliminar
+                                                    </button>
+                                                    <Link 
+                                                        to={`/producto/${producto.idProducto}`}
+                                                        className="btn-action view"
+                                                    >
+                                                        Ver
+                                                    </Link>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
                         {productos.length === 0 && (
-                            <div className="no-productos">
-                                <TextAtom variant="h3" className="no-productos-title">
-                                    No hay productos disponibles
-                                </TextAtom>
-                                <TextAtom variant="p" className="no-productos-text">
-                                    Comienza agregando nuevos productos a tu catálogo.
-                                </TextAtom>
+                            <div className="no-data">
+                                <TextAtom variant="h3">No hay productos</TextAtom>
+                                <TextAtom variant="p">Comienza agregando nuevos productos a tu catálogo.</TextAtom>
                                 <Link to="/admin/products/new" className="admin-btn primary">
                                     Agregar Primer Producto
                                 </Link>
                             </div>
                         )}
-
-                        <div className="productos-contador">
-                            <TextAtom variant="p" className="contador-text">
-                                Mostrando {productos.length} producto{productos.length !== 1 ? 's' : ''} en el catálogo
-                            </TextAtom>
-                        </div>
                     </div>
                 )}
 
+                {/* Pestaña de Usuarios */}
                 {activeTab === 'usuarios' && (
                     <div className="users-tab">
                         <div className="table-header">
@@ -299,6 +426,115 @@ const AdminHome = () => {
                                 <span>Cargando usuarios...</span>
                             </div>
                         )}
+                    </div>
+                )}
+
+                {/* Pestaña de Estadísticas */}
+                {activeTab === 'estadisticas' && (
+                    <div className="stats-tab">
+                        <div className="stats-grid">
+                            <div className="stat-card-large">
+                                <h3>📦 Resumen de Productos</h3>
+                                <div className="stat-details">
+                                    <div className="stat-item">
+                                        <span>Total productos:</span>
+                                        <strong>{stats.totalProductos}</strong>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span>Bajo stock (10 unidades):</span>
+                                        <strong className="warning">{stats.productosBajoStock}</strong>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span>Con descuento:</span>
+                                        <strong className="discount">{stats.productosConDescuento}</strong>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span>Agotados:</span>
+                                        <strong className="danger">
+                                            {productos.filter(p => p.stock === 0).length}
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="stat-card-large">
+                                <h3>👥 Resumen de Usuarios</h3>
+                                <div className="stat-details">
+                                    <div className="stat-item">
+                                        <span>Total usuarios:</span>
+                                        <strong>{stats.totalUsuarios}</strong>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span>Usuarios activos:</span>
+                                        <strong className="success">{stats.usuariosActivos}</strong>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span>Administradores:</span>
+                                        <strong className="admin">{stats.administradores}</strong>
+                                    </div>
+                                    <div className="stat-item">
+                                        <span>Usuarios inactivos:</span>
+                                        <strong className="danger">
+                                            {usuarios.filter(u => u.activo === false).length}
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="stat-card-large">
+                                <h3>🏷️ Distribución por Marca</h3>
+                                <div className="stat-details">
+                                    {Object.entries(
+                                        productos.reduce((acc, producto) => {
+                                            const marca = producto.marca?.nombre || 'Sin marca';
+                                            acc[marca] = (acc[marca] || 0) + 1;
+                                            return acc;
+                                        }, {})
+                                    ).map(([marca, count]) => (
+                                        <div key={marca} className="stat-item">
+                                            <span>{marca}:</span>
+                                            <strong>{count}</strong>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="stat-card-large">
+                                <h3>🚻 Distribución por Género</h3>
+                                <div className="stat-details">
+                                    {Object.entries(
+                                        productos.reduce((acc, producto) => {
+                                            const genero = producto.genero?.nombre || 'Sin género';
+                                            acc[genero] = (acc[genero] || 0) + 1;
+                                            return acc;
+                                        }, {})
+                                    ).map(([genero, count]) => (
+                                        <div key={genero} className="stat-item">
+                                            <span>{genero}:</span>
+                                            <strong>{count}</strong>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="stat-card-large">
+                                <h3>👑 Distribución por Rol</h3>
+                                <div className="stat-details">
+                                    {Object.entries(
+                                        usuarios.reduce((acc, usuario) => {
+                                            const rol = getRolNombre(usuario.rol?.id);
+                                            acc[rol] = (acc[rol] || 0) + 1;
+                                            return acc;
+                                        }, {})
+                                    ).map(([rol, count]) => (
+                                        <div key={rol} className="stat-item">
+                                            <span>{rol}:</span>
+                                            <strong>{count}</strong>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
