@@ -14,7 +14,7 @@ function Layout() {
 
   const navbarLinks = isAdminRoute ? adminLinks : publicLinks;
   const navbarTitle = isAdminRoute ? "ZAPA STORE Admin" : "ZAPA STORE";
-
+  
   return (
     <>
       {showNavbar && <Navbar links={navbarLinks} title={navbarTitle} />}
