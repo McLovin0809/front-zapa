@@ -3,8 +3,9 @@ module.exports = function (config) {
  config.set({
    frameworks: ['jasmine'],
    files: [
+    'src/test/setupTests.js',
     'src/**/*.spec.jsx',
-   ],
+  ],
    preprocessors: {
      'src/**/*.spec.jsx': ['webpack'],
      'src/**/*.jsx': ['coverage'],

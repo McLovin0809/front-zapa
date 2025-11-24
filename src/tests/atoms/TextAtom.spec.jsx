@@ -1,12 +1,12 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jasmine-dom";
 import TextAtom from "../../components/atoms/TextAtom";
 
 describe("TextAtom", () => {
   it("renderiza el texto correctamente", () => {
     render(<TextAtom>Hola Mundo</TextAtom>);
-    expect(screen.getByText("Hola Mundo")).toBeInTheDocument();
+    const element = screen.getByText("Hola Mundo");
+    expect(element).not.toBeNull(); // matcher nativo
   });
 
   it("usa el tag correcto según 'variant'", () => {
