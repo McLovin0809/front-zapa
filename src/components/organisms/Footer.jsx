@@ -1,16 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import {
+  FaInstagram,
+  FaFacebook,
+  FaCcVisa,
+  FaCcMastercard,
+  FaMoneyBillWave
+} from "react-icons/fa";
 import "../../style/components/Footer.css";
 
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-columns">
+
         {/* Centro de ayuda */}
         <div className="footer-column">
           <h4>Centro de ayuda</h4>
           <ul>
-            <li><Link to="/contacto">Contacto</Link></li>
+            <li><Link to="/contact">Contacto</Link></li>
           </ul>
         </div>
 
@@ -18,29 +26,39 @@ const Footer = () => {
         <div className="footer-column">
           <h4>Tienda</h4>
           <ul>
-            <li><Link to="/tiendas">Tiendas</Link></li>
-            <li><Link to="/privacidad">Política de privacidad</Link></li>
-            <li><Link to="/faq">Preguntas frecuentes</Link></li>
-            <li><Link to="/terminos">Términos y condiciones</Link></li>
+            <li><Link to="/">Tiendas</Link></li>
+            <li><Link to="/">Política de privacidad</Link></li>
+            <li><Link to="/">Preguntas frecuentes</Link></li>
+            <li><Link to="/">Términos y condiciones</Link></li>
           </ul>
         </div>
 
-        {/* Redes y pagos */}
+        {/* Redes Sociales y Métodos de Pago */}
         <div className="footer-column">
           <h4>Redes Sociales</h4>
           <div className="social-icons">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram />
+            </a>
+
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebook />
+            </a>
           </div>
-        <div className="footer-column">
-            <h4>Metodos de pago</h4>
-        </div>
+
+          <h4>Métodos de Pago</h4>
           <div className="payment-logos">
-            
-            <span>Visa</span>
-            <span>MasterCard</span>
-            <span>Redcompra</span>
-            <span>Mercado Pago</span>
+            <FaCcVisa />
+            <FaCcMastercard />
+            <FaMoneyBillWave /> {/* Ícono general para Redcompra / MercadoPago */}
           </div>
         </div>
       </div>

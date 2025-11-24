@@ -1,0 +1,89 @@
+/* Fondo general blanco */
+.perfil-page {
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  font-family: 'Segoe UI', sans-serif;
+  color: #111;
+}
+
+/* Tarjeta con borde negro y sombra suave */
+.perfil-card {
+  background: #ffffff;
+  border: 2px solid #111;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  max-width: 480px;
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Encabezado con avatar y nombre */
+.perfil-header {
+  margin-bottom: 2rem;
+}
+
+.perfil-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  border: 2px solid #111;
+  object-fit: cover;
+  background-color: #eee;
+}
+
+.perfil-email {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* Información personal */
+.perfil-info {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.perfil-info h3 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  border-bottom: 2px solid #111;
+  padding-bottom: 0.5rem;
+}
+
+.perfil-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.perfil-info li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: #111;
+}
+
+/* Botón de cerrar sesión */
+.perfil-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.perfil-btn {
+  padding: 10px 20px;
+  border: 2px solid #111;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #ffffff;
+  color: #111;
+  transition: all 0.3s ease;
+}
+
+.perfil-btn.logout:hover {
+  background-color: #111;
+  color: #ffffff;
+}

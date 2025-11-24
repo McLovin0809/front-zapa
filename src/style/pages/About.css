@@ -1,0 +1,84 @@
+.about-page {
+  background-color: #ffff;
+  color: #222423;
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.about-hero {
+  text-align: center;
+  max-width: 800px;
+  margin-bottom: 3rem;
+}
+
+.about-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.about-title::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: #222423;
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+.about-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+
+.about-section {
+  background-color: #f5f5eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 2rem;
+  max-width: 800px;
+  width: 100%;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.about-section:hover {
+  transform: translateY(-4px);
+}
+
+.about-section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #222423;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.5rem;
+}
+
+.about-section p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #333;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .about-title {
+    font-size: 2.2rem;
+  }
+
+  .about-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .about-section {
+    padding: 1.5rem;
+  }
+}

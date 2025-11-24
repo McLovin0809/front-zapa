@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { navVariants, itemVariants } from '../../animations/navbarAnimation';
+import React, { useState, useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { navVariants, itemVariants } from "../../animations/navbarAnimation";
+import { AuthContext } from "../../context/AuthContext";
 import "../../style/components/Navbar.css";
 
 function Navbar({ links, title }) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/login');
+    logout();
+    navigate("/login");
     setIsOpen(false);
   };
 
   const handleLinkClick = (e, link) => {
-    if (link.label === 'Salir') {
+    if (link.label === "Salir") {
       e.preventDefault();
       handleLogout();
     } else {
@@ -45,21 +46,49 @@ function Navbar({ links, title }) {
                 to={link.to}
                 onClick={(e) => handleLinkClick(e, link)}
                 className={({ isActive }) =>
-                  `nav-link ${isActive ? 'nav-link--active' : ''}`
+                  `nav-link ${isActive ? "nav-link--active" : ""}`
                 }
               >
                 {link.label}
               </NavLink>
             </motion.div>
           ))}
+
+          {/* ✅ Mostrar solo uno: Perfil o Iniciar sesión */}
+          {!user?.email ? (
+            <motion.div variants={itemVariants}>
+              <NavLink
+                to="/login"
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "nav-link--active" : ""}`
+                }
+              >
+                Iniciar sesión
+              </NavLink>
+            </motion.div>
+          ) : (
+            <motion.div variants={itemVariants}>
+              <NavLink
+                to="/perfil"
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "nav-link--active" : ""}`
+                }
+              >
+                Perfil
+              </NavLink>
+            </motion.div>
+          )}
         </motion.div>
 
+        {/* Menú móvil */}
         <button
           className="nav-toggle"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle menu"
         >
-          <span className={`hamburger ${isOpen ? 'hamburger--open' : ''}`}></span>
+          <span className={`hamburger ${isOpen ? "hamburger--open" : ""}`}></span>
         </button>
 
         <AnimatePresence>
@@ -75,9 +104,9 @@ function Navbar({ links, title }) {
 
               <motion.div
                 className="nav-mobile nav-mobile--open"
-                initial={{ x: '100%' }}
+                initial={{ x: "100%" }}
                 animate={{ x: 0 }}
-                exit={{ x: '100%' }}
+                exit={{ x: "100%" }}
                 transition={{ duration: 0.3 }}
               >
                 <div className="nav-mobile-content">
@@ -87,13 +116,40 @@ function Navbar({ links, title }) {
                         to={link.to}
                         onClick={(e) => handleLinkClick(e, link)}
                         className={({ isActive }) =>
-                          `nav-mobile-link ${isActive ? 'nav-mobile-link--active' : ''}`
+                          `nav-mobile-link ${isActive ? "nav-mobile-link--active" : ""}`
                         }
                       >
                         {link.label}
                       </NavLink>
                     </div>
                   ))}
+
+                  {/* ✅ Condicional en menú móvil */}
+                  {!user?.email ? (
+                    <div>
+                      <NavLink
+                        to="/login"
+                        onClick={() => setIsOpen(false)}
+                        className={({ isActive }) =>
+                          `nav-mobile-link ${isActive ? "nav-mobile-link--active" : ""}`
+                        }
+                      >
+                        Iniciar sesión
+                      </NavLink>
+                    </div>
+                  ) : (
+                    <div>
+                      <NavLink
+                        to="/perfil"
+                        onClick={() => setIsOpen(false)}
+                        className={({ isActive }) =>
+                          `nav-mobile-link ${isActive ? "nav-mobile-link--active" : ""}`
+                        }
+                      >
+                        Perfil
+                      </NavLink>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </>

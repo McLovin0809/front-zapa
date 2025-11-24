@@ -6,21 +6,19 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ Borra el login al cargar la app
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
+    localStorage.removeItem("user");
+    setUser(null);
     setLoading(false);
   }, []);
 
   const login = (userData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
+    // ❌ No guardamos en localStorage
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
     setUser(null);
   };
 

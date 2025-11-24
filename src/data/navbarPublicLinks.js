@@ -1,8 +1,8 @@
 export const publicLinks = [
-  { to: "/", label: "Inicio" },
-  { to: "/producto", label: "Productos"},
-  { to: "/contact", label: "Contacto" },
-  { to: "/login", label: "Iniciar sesión" },
+  { label: "Inicio", to: "/" },
+  { label: "Productos", to: "/productos" },
+  { label: "Sobre Nosotros", to: "/about" },
 ];
+
 
 export default publicLinks;

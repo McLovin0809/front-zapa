@@ -34,12 +34,13 @@ const Login = () => {
 
       generarMensaje("Login exitoso", "success");
       login(response.data);
+      localStorage.setItem("usuario", JSON.stringify(response.data)); // ✅ persistencia
 
       const userEmail = response.data.email;
       if (userEmail && userEmail.toLowerCase().includes("admin")) {
         setTimeout(() => navigate("/Admin/HomeAdmin"), 800);
       } else {
-        setTimeout(() => navigate("/"), 800);
+        setTimeout(() => navigate("/perfil"), 800); // ✅ redirige al perfil
       }
     } catch (error) {
       console.error("Error en login:", error.response?.data);
