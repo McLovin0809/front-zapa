@@ -1,7 +1,7 @@
 import React from "react";
 
 function TextAtom({children, variant = 'p', className}) {
-    const Tag = variant; //puede ser h1 p span etc
+    const Tag = variant;
     return <Tag className={className}>{children}</Tag>;
 }
 
