@@ -1,28 +1,32 @@
-import { lazy } from 'react';
+import { lazy } from "react";
 
-// Lazy loading
-const Home = lazy(() => import('../pages/user/Home'));
-const Login = lazy(() => import('../pages/auth/Login'));
-const CreateUser = lazy(() => import('../pages/auth/CreateUser'));
-const HomeAdmin = lazy(() => import('../pages/admin/HomeAdmin'));
-const HomeProducto = lazy(() => import('../pages/admin/Productos/HomeProductos')); 
+// Lazy loading de páginas
+const Home = lazy(() => import("../pages/user/Home"));
+const Contact = lazy(() => import("../pages/user/Contact"));
+const HomeAdmin = lazy(() => import("../pages/admin/HomeAdmin"));
+const PerfilUsuario = lazy(() => import("../pages/user/PerfilUsuario"));
+const AuthPanel = lazy(() => import("../pages/auth/AuthPanel"));
+const AddProduct = lazy(() => import("../pages/admin/AddProduct"));
+const Carrito = lazy(() => import("../pages/user/Carrito"));
+const About = lazy(() => import("../pages/user/About"));
 
-// Rutas públicas
-const publicRoutes = [
-  { path: '/', element: <Home />, showNavbar: true },
-  { path: '/login', element: <Login />, showNavbar: false },
-  { path: '/CreateUser', element: <CreateUser />, showNavbar: false },
+export const publicRoutes = [
+  { path: "/", element: <Home />, showNavbar: true },
+  { path: "/about", element: <About />, showNavbar: true },
+  { path: "/contact", element: <Contact />, showNavbar: true },
+  { path: "/login", element: <AuthPanel />, showNavbar: false },
+  { path: "/register", element: <AuthPanel />, showNavbar: false },
+  { path: "/perfil", element: <PerfilUsuario />, showNavbar: true },
+  { path: "/carrito", element: <Carrito />, showNavbar: true },
 ];
 
-// Rutas admin
-const adminRoutes = [
-  { path: '/admin/dashboard', element: <HomeAdmin />, isAdmin: true },
-  { path: '/admin/productos', element: <HomeProducto />, isAdmin: true }, 
+export const adminRoutes = [
+  { path: "/admin/HomeAdmin", element: <HomeAdmin />, isAdmin: true },
+  { path: "/admin/AddProduct", element: <AddProduct />, isAdmin: true },
 ];
 
-// Ruta 404
-const notFoundRoute = {
-  path: '*',
+export const notFoundRoute = {
+  path: "*",
   element: <div className="text-center py-10 text-2xl">404 - Página no encontrada u.u</div>,
   showNavbar: false,
 };
