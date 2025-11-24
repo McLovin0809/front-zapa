@@ -25,6 +25,7 @@ const publicRoutes = [
 
 const adminRoutes = [
   { path: '/Admin/HomeAdmin', element: <HomeAdmin />, isAdmin: true },
+  { path: '/Admin/AddProduct', element: <AddProduct />, isAdmin: true },
 ];
 
 const notFoundRoute = {
