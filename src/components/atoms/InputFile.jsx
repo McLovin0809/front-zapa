@@ -1,5 +1,4 @@
 import React from 'react';
-import "../../style/components/atoms/InputFile.css"
 
 function InputFile({
   onChange,

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/tests/atoms/TextAtom.spec.jsx</title>
+    <title>Code coverage report for src/tests/atoms/LinkAtom.spec.jsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/tests/atoms</a> TextAtom.spec.jsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/tests/atoms</a> LinkAtom.spec.jsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -80,7 +80,13 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -94,24 +100,36 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
 import { render, screen } from "@testing-library/react";
-import TextAtom from "../../components/atoms/TextAtom";
+import LinkAtom from "../../components/atoms/LinkAtom";
 &nbsp;
-describe("TextAtom", () =&gt; {
+describe("LinkAtom", () =&gt; {
   it("renderiza el texto correctamente", () =&gt; {
-    render(&lt;TextAtom&gt;Hola Mundo&lt;/TextAtom&gt;);
-    const element = screen.getByText("Hola Mundo");
-    expect(element).not.toBeNull(); // matcher nativo
+    render(&lt;LinkAtom href="/home"&gt;Ir a Home&lt;/LinkAtom&gt;);
+    const link = screen.getByText("Ir a Home");
+    expect(link).not.toBeNull();
   });<span class="branch-1 cbranch-no" title="branch not covered" ></span>
 &nbsp;
-  it("usa el tag correcto según 'variant'", () =&gt; {
-    render(&lt;TextAtom variant="h2"&gt;Título&lt;/TextAtom&gt;);
-    const element = screen.getByText("Título");
-    expect(element.tagName).toBe("H2");
+  it("usa el href correcto", () =&gt; {
+    render(&lt;LinkAtom href="/about"&gt;Acerca&lt;/LinkAtom&gt;);
+    const link = screen.getByText("Acerca");
+    expect(link.getAttribute("href")).toBe("/about");
+  });
+&nbsp;
+  it("aplica la clase adicional", () =&gt; {
+    render(&lt;LinkAtom href="/" className="extra"&gt;Inicio&lt;/LinkAtom&gt;);
+    const link = screen.getByText("Inicio");
+    expect(link.className).toContain("extra");
   });
 });
 &nbsp;</pre></td></tr></table></pre>

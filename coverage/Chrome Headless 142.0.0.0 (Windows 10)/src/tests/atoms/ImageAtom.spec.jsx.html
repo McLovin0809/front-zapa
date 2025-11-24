@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/tests/atoms/TextAtom.spec.jsx</title>
+    <title>Code coverage report for src/tests/atoms/ImageAtom.spec.jsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/tests/atoms</a> TextAtom.spec.jsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/tests/atoms</a> ImageAtom.spec.jsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -80,7 +80,9 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -94,24 +96,28 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
 import { render, screen } from "@testing-library/react";
-import TextAtom from "../../components/atoms/TextAtom";
+import ImageAtom from "../../components/atoms/ImageAtom";
 &nbsp;
-describe("TextAtom", () =&gt; {
-  it("renderiza el texto correctamente", () =&gt; {
-    render(&lt;TextAtom&gt;Hola Mundo&lt;/TextAtom&gt;);
-    const element = screen.getByText("Hola Mundo");
-    expect(element).not.toBeNull(); // matcher nativo
-  });<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+describe("ImageAtom", () =&gt; {
+  it("renderiza con src y alt", () =&gt; {
+    render(&lt;ImageAtom src="foto.png" alt="Foto de prueba" /&gt;);
+    const img = screen.getByAltText("Foto de prueba");
+    // Jasmine: comprobamos que no sea null
+    expect(img).not.toBeNull();<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+    expect(img.getAttribute("src")).toBe("foto.png");
+  });
 &nbsp;
-  it("usa el tag correcto según 'variant'", () =&gt; {
-    render(&lt;TextAtom variant="h2"&gt;Título&lt;/TextAtom&gt;);
-    const element = screen.getByText("Título");
-    expect(element.tagName).toBe("H2");
+  it("aplica clase correctamente", () =&gt; {
+    render(&lt;ImageAtom src="foto.png" alt="Foto" className="extra" /&gt;);
+    const img = screen.getByAltText("Foto");
+    expect(img.className).toContain("extra");
   });
 });
 &nbsp;</pre></td></tr></table></pre>

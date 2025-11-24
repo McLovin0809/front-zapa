@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/tests/atoms/TextAtom.spec.jsx</title>
+    <title>Code coverage report for src/tests/atoms/ButtonAtom.spec.jsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/tests/atoms</a> TextAtom.spec.jsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/tests/atoms</a> ButtonAtom.spec.jsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -99,19 +99,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
 import { render, screen } from "@testing-library/react";
-import TextAtom from "../../components/atoms/TextAtom";
+import Button from "../../components/atoms/ButtonAtom";
 &nbsp;
-describe("TextAtom", () =&gt; {
+describe("ButtonAtom", () =&gt; {
   it("renderiza el texto correctamente", () =&gt; {
-    render(&lt;TextAtom&gt;Hola Mundo&lt;/TextAtom&gt;);
-    const element = screen.getByText("Hola Mundo");
-    expect(element).not.toBeNull(); // matcher nativo
+    render(&lt;Button text="Click aquí" /&gt;);
+    const button = screen.getByText("Click aquí");
+    expect(button).not.toBeNull();
   });<span class="branch-1 cbranch-no" title="branch not covered" ></span>
 &nbsp;
-  it("usa el tag correcto según 'variant'", () =&gt; {
-    render(&lt;TextAtom variant="h2"&gt;Título&lt;/TextAtom&gt;);
-    const element = screen.getByText("Título");
-    expect(element.tagName).toBe("H2");
+  it("aplica clase correctamente", () =&gt; {
+    render(&lt;Button text="Guardar" className="btn-primary" /&gt;);
+    const button = screen.getByText("Guardar");
+    expect(button.className).toContain("btn-primary");
   });
 });
 &nbsp;</pre></td></tr></table></pre>
