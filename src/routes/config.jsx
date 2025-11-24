@@ -16,8 +16,8 @@ const publicRoutes = [
   { path: '/', element: <Home />, showNavbar: true },
   { path: '/about', element: <About />, showNavbar: true },
   { path: '/contact', element: <Contact />, showNavbar: true },
-  { path: '/login', element: <AuthPanel />, showNavbar: false },
-  { path: '/register', element: <AuthPanel />, showNavbar: false },
+  { path: '/login', element: <AuthPanel />, showNavbar: true },
+  { path: '/register', element: <AuthPanel />, showNavbar: true },
   { path: '/perfil', element: <PerfilUsuario />, showNavbar: true },
   { path: '/ProductosUser', element: <ProductosUser />, showNavbar: true },
   { path: '/Carrito', element: <Carrito />, showNavbar: true }, // 
@@ -25,7 +25,6 @@ const publicRoutes = [
 
 const adminRoutes = [
   { path: '/Admin/HomeAdmin', element: <HomeAdmin />, isAdmin: true },
-  { path: '/admin/AddProduct', element: <AddProduct />, isAdmin: true },
 ];
 
 const notFoundRoute = {
