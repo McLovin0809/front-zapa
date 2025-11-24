@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import TextAtom from '../../components/atoms/TextAtom';
+import { CartContext } from '../../context/CartContext';
 import '../../style/pages/Home.css';
 
 const Productos = () => {
   const [productos, setProductos] = useState([]);
+  const [mensajeCarrito, setMensajeCarrito] = useState(null);
+  const { agregarProducto } = useContext(CartContext);
 
   useEffect(() => {
     fetchProductos();
@@ -25,8 +28,24 @@ const Productos = () => {
     return (precio * (1 - descuento / 100)).toFixed(2);
   };
 
+  const handleAgregarCarrito = (producto) => {
+    agregarProducto(producto); // ✅ Agregar al carrito real
+    setMensajeCarrito(`✅ "${producto.nombre}" agregado al carrito`);
+
+    setTimeout(() => {
+      setMensajeCarrito(null);
+    }, 2500);
+  };
+
   return (
     <main className='home'>
+      {/* ✅ Mensaje visual */}
+      {mensajeCarrito && (
+        <div className="mensaje-toast">
+          <TextAtom variant="span">{mensajeCarrito}</TextAtom>
+        </div>
+      )}
+
       <div className="productos-grid">
         {productos.map(producto => (
           <div key={producto.idProducto} className="producto-card">
@@ -85,6 +104,7 @@ const Productos = () => {
                 <button 
                   className={`btn-agregar-carrito ${producto.stock > 0 ? 'btn-disponible' : 'btn-agotado'}`}
                   disabled={producto.stock === 0}
+                  onClick={() => handleAgregarCarrito(producto)}
                 >
                   <TextAtom variant="span">
                     {producto.stock > 0 ? 'Agregar al Carrito' : 'Agotado'}
