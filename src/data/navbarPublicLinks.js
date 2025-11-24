@@ -1,3 +1,4 @@
+// Generador de links públicos dinámicos
 export const PublicLinks = (user, totalItems) => {
   const links = [
     { label: "Inicio", to: "/" },
@@ -13,6 +14,3 @@ export const PublicLinks = (user, totalItems) => {
 
   return links;
 };
-
-// Exportación correcta
-export default PublicLinks;

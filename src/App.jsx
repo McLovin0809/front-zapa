@@ -1,7 +1,7 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Suspense } from "react";
-import { publicLinks } from "./data/navbarPublicLinks";
-import { adminLinks } from "./data/navbarAdminLinks";
+import { PublicLinks } from "./data/navbarPublicLinks";
+import { AdminLinks } from "./data/navbarAdminLinks";
 import Navbar from "./components/organisms/Navbar";
 import { appRoutes } from "./routes/config";
 
@@ -12,12 +12,18 @@ function Layout() {
   const currentRoute = appRoutes.find(route => route.path === location.pathname);
   const showNavbar = isAdminRoute || currentRoute?.showNavbar;
 
-  const navbarLinks = isAdminRoute ? adminLinks : publicLinks;
   const navbarTitle = isAdminRoute ? "ZAPA STORE Admin" : "ZAPA STORE";
-  
+
   return (
     <>
-      {showNavbar && <Navbar links={navbarLinks} title={navbarTitle} />}
+      {showNavbar && (
+        <Navbar
+          links={isAdminRoute ? AdminLinks : PublicLinks}
+          title={navbarTitle}
+          isAdmin={isAdminRoute}
+          adminLinks={AdminLinks}
+        />
+      )}
 
       <main>
         <Suspense
