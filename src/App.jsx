@@ -50,7 +50,11 @@ function App() {
 }
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 export default App;
+=======
+export default App;
+>>>>>>> Stashed changes
 =======
 export default App;
 >>>>>>> Stashed changes
