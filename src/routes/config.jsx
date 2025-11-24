@@ -5,7 +5,7 @@ const About = lazy(() => import('../pages/user/About'));
 const Contact = lazy(() => import('../pages/user/Contact'));
 const PerfilUsuario = lazy(() => import('../pages/user/PerfilUsuario'));
 const ProductosUser = lazy(() => import('../pages/user/ProductosUser'));
-const Carrito = lazy(() => import('../pages/user/Carrito')); // ✅ carrito
+const Carrito = lazy(() => import('../pages/user/Carrito'));
 
 const AuthPanel = lazy(() => import('../pages/auth/AuthPanel'));
 
@@ -29,7 +29,7 @@ const adminRoutes = [
 
 const notFoundRoute = {
   path: '*',
-  element: <div className="text-center py-10 text-2xl">404 - Página no encontrada u.u</div>,
+  element: <div className="">404 - Página no encontrada u.u</div>,
   showNavbar: false,
 };
 
