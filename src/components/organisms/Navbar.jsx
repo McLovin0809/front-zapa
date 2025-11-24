@@ -3,12 +3,15 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { navVariants, itemVariants } from "../../animations/navbarAnimation";
 import { AuthContext } from "../../context/AuthContext";
+import { CartContext } from "../../context/CartContext";
 import "../../style/components/Navbar.css";
 
-function Navbar({ links, title }) {
+function Navbar({ links }) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext) || {};
+  const { carrito } = useContext(CartContext) || { carrito: [] };
+  const totalItems = carrito.reduce((acc, p) => acc + p.cantidad, 0);
 
   const handleLogout = () => {
     logout();
@@ -40,6 +43,7 @@ function Navbar({ links, title }) {
           initial="hidden"
           animate="visible"
         >
+          {/* Links principales */}
           {links.map((link, i) => (
             <motion.div key={i} variants={itemVariants}>
               <NavLink
@@ -54,35 +58,34 @@ function Navbar({ links, title }) {
             </motion.div>
           ))}
 
-          {/* ✅ Mostrar solo uno: Perfil o Iniciar sesión */}
-          {!user?.email ? (
-            <motion.div variants={itemVariants}>
-              <NavLink
-                to="/login"
-                onClick={() => setIsOpen(false)}
-                className={({ isActive }) =>
-                  `nav-link ${isActive ? "nav-link--active" : ""}`
-                }
-              >
-                Iniciar sesión
-              </NavLink>
-            </motion.div>
-          ) : (
-            <motion.div variants={itemVariants}>
-              <NavLink
-                to="/perfil"
-                onClick={() => setIsOpen(false)}
-                className={({ isActive }) =>
-                  `nav-link ${isActive ? "nav-link--active" : ""}`
-                }
-              >
-                Perfil
-              </NavLink>
-            </motion.div>
-          )}
+          {/* Perfil o Login */}
+          <motion.div variants={itemVariants}>
+            <NavLink
+              to={user?.email ? "/perfil" : "/login"}
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) =>
+                `nav-link ${isActive ? "nav-link--active" : ""}`
+              }
+            >
+              {user?.email ? "Perfil" : "Iniciar sesión"}
+            </NavLink>
+          </motion.div>
+
+          {/* Carrito */}
+          <motion.div variants={itemVariants}>
+            <NavLink
+              to="/carrito"
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) =>
+                `nav-link carrito-link ${isActive ? "nav-link--active" : ""}`
+              }
+            >
+              🛒 Carrito ({totalItems})
+            </NavLink>
+          </motion.div>
         </motion.div>
 
-        {/* Menú móvil */}
+        {/* Botón menú móvil */}
         <button
           className="nav-toggle"
           onClick={() => setIsOpen(!isOpen)}
@@ -91,6 +94,7 @@ function Navbar({ links, title }) {
           <span className={`hamburger ${isOpen ? "hamburger--open" : ""}`}></span>
         </button>
 
+        {/* Menú móvil */}
         <AnimatePresence>
           {isOpen && (
             <>
@@ -124,32 +128,31 @@ function Navbar({ links, title }) {
                     </div>
                   ))}
 
-                  {/* ✅ Condicional en menú móvil */}
-                  {!user?.email ? (
-                    <div>
-                      <NavLink
-                        to="/login"
-                        onClick={() => setIsOpen(false)}
-                        className={({ isActive }) =>
-                          `nav-mobile-link ${isActive ? "nav-mobile-link--active" : ""}`
-                        }
-                      >
-                        Iniciar sesión
-                      </NavLink>
-                    </div>
-                  ) : (
-                    <div>
-                      <NavLink
-                        to="/perfil"
-                        onClick={() => setIsOpen(false)}
-                        className={({ isActive }) =>
-                          `nav-mobile-link ${isActive ? "nav-mobile-link--active" : ""}`
-                        }
-                      >
-                        Perfil
-                      </NavLink>
-                    </div>
-                  )}
+                  {/* Perfil o Login en móvil */}
+                  <div>
+                    <NavLink
+                      to={user?.email ? "/perfil" : "/login"}
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) =>
+                        `nav-mobile-link ${isActive ? "nav-mobile-link--active" : ""}`
+                      }
+                    >
+                      {user?.email ? "Perfil" : "Iniciar sesión"}
+                    </NavLink>
+                  </div>
+
+                  {/* Carrito en móvil */}
+                  <div>
+                    <NavLink
+                      to="/carrito"
+                      onClick={() => setIsOpen(false)}
+                      className={({ isActive }) =>
+                        `nav-mobile-link ${isActive ? "nav-mobile-link--active" : ""}`
+                      }
+                    >
+                      🛒 Carrito ({totalItems})
+                    </NavLink>
+                  </div>
                 </div>
               </motion.div>
             </>

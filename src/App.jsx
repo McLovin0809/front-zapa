@@ -7,6 +7,7 @@ import HomeAdmin from "./pages/admin/HomeAdmin";
 import PerfilUsuario from "./pages/user/PerfilUsuario";
 import AuthPanel from "./pages/auth/AuthPanel";
 import AddProduct from "./pages/admin/AddProduct";
+import Carrito from "./pages/user/Carrito";
 import "./style/components/Toast.css";
 import About from "./pages/user/About";
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<AuthPanel />} />
         <Route path="/register" element={<AuthPanel />} />
         <Route path="/perfil" element={<PerfilUsuario />} />
+        <Route path="/carrito" element={<Carrito />} />
         <Route path="/Admin/HomeAdmin" element={<HomeAdmin />} />
         <Route path="/admin/AddProduct" element={<AddProduct />} />
       </Routes>

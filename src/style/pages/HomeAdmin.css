@@ -542,7 +542,7 @@
 .stat-item strong.admin { color: #7b1fa2; }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .admin-page {
         padding: 10px;
     }
