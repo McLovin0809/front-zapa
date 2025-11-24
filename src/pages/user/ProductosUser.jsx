@@ -110,9 +110,6 @@ const Productos = () => {
                     {producto.stock > 0 ? 'Agregar al Carrito' : 'Agotado'}
                   </TextAtom>
                 </button>
-                <Link to={`/producto/${producto.idProducto}`} className="btn-ver-detalles">
-                  <TextAtom variant="span">Ver</TextAtom>
-                </Link>
               </div>
             </div>
           </div>
