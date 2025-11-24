@@ -1,47 +1,50 @@
-// services/categoriaService.js
 import axios from 'axios';
 
-const BASE_URL = 'https://backend-zapa.onrender.com/api/categorias';
+const BASE_URL = 'https://backend-zapa.onrender.com/api/marcas';
 
-class CategoriaService {
-    // Obtener todas las categorías
-    getAllCategorias() {
-        return axios.get(BASE_URL);
-    }
+class MarcaService {
+  // Obtener todas las marcas
+  getAllMarcas() {
+    return axios.get(BASE_URL);
+  }
 
-    // Obtener categoría por ID
-    getCategoriaById(id) {
-        return axios.get(`${BASE_URL}/${id}`);
-    }
+  // Obtener marca por ID
+  getMarcaById(id) {
+    return axios.get(`${BASE_URL}/${id}`);
+  }
 
-    // Crear nueva categoría
-    createCategoria(categoria) {
-        return axios.post(BASE_URL, categoria);
-    }
+  // Crear nueva marca
+  createMarca(marca) {
+    return axios.post(BASE_URL, marca);
+  }
 
-    // Actualizar categoría completa (PUT)
-    updateCategoria(id, categoria) {
-        return axios.put(`${BASE_URL}/${id}`, categoria);
-    }
+  // Actualizar marca completa (PUT)
+  updateMarca(id, marca) {
+    return axios.put(`${BASE_URL}/${id}`, marca);
+  }
 
-    // Actualizar categoría parcial (PATCH)
-    patchCategoria(id, datos) {
-        return axios.patch(`${BASE_URL}/${id}`, datos);
-    }
+  // Actualizar marca parcial (PATCH)
+  patchMarca(id, datos) {
+    return axios.patch(`${BASE_URL}/${id}`, datos);
+  }
 
-    // Eliminar categoría
-    deleteCategoria(id) {
-        return axios.delete(`${BASE_URL}/${id}`);
-    }
+  // Eliminar marca
+  deleteMarca(id) {
+    return axios.delete(`${BASE_URL}/${id}`);
+  }
 
-    // Métodos personalizados
-    buscarPorNombre(nombre) {
-        return axios.get(`${BASE_URL}/buscar/${nombre}`);
-    }
+  // Métodos personalizados
+  buscarPorNombreExacto(nombre) {
+    return axios.get(`${BASE_URL}/buscar/exacto/${nombre}`);
+  }
 
-    existeCategoria(nombre) {
-        return axios.get(`${BASE_URL}/existe/${nombre}`);
-    }
+  buscarPorNombreParcial(nombre) {
+    return axios.get(`${BASE_URL}/buscar/parcial/${nombre}`);
+  }
+
+  existeMarca(nombre) {
+    return axios.get(`${BASE_URL}/existe/${nombre}`);
+  }
 }
 
-export default new CategoriaService();
+export default new MarcaService();

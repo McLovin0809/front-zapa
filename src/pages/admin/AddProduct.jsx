@@ -5,6 +5,7 @@ import MarcaService from '../../services/MarcaService';
 import GeneroService from '../../services/GeneroService';
 import CategoriaService from '../../services/CategoriaService';
 import TextAtom from '../../components/atoms/TextAtom';
+import { uploadToImgBB } from '../../utils/uploadImage';
 import '../../style/pages/AddProduct.css';
 
 const AddProduct = () => {
@@ -14,7 +15,19 @@ const AddProduct = () => {
     const [marcas, setMarcas] = useState([]);
     const [generos, setGeneros] = useState([]);
     const [categorias, setCategorias] = useState([]);
-    
+
+    const [uploadingImages, setUploadingImages] = useState({
+        principal: false,
+        secundaria: false,
+        extra: false
+    });
+
+    const [uploadProgress, setUploadProgress] = useState({
+        principal: 0,
+        secundaria: 0,
+        extra: 0
+    });
+
     const [formData, setFormData] = useState({
         nombre: '',
         descripcion: '',
@@ -26,7 +39,9 @@ const AddProduct = () => {
         imgExtra: '',
         marca: { id: '' },
         genero: { id: '' },
-        categoria: { id: '' }
+        categoria: { id: '' },
+        destacado: false,
+        activo: true
     });
 
     const [errors, setErrors] = useState({});
@@ -46,9 +61,9 @@ const AddProduct = () => {
             const [marcasRes, generosRes, categoriasRes] = await Promise.all([
                 MarcaService.getAllMarcas(),
                 GeneroService.getAllGeneros(),
-                CategoriaService.getAllCategorias()
+                CategoriaService.getCategorias()
             ]);
-            
+
             setMarcas(marcasRes.data || marcasRes);
             setGeneros(generosRes.data || generosRes);
             setCategorias(categoriasRes.data || categoriasRes);
@@ -61,7 +76,7 @@ const AddProduct = () => {
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
-        
+
         if (name.startsWith('marca.') || name.startsWith('genero.') || name.startsWith('categoria.')) {
             const field = name.split('.')[0];
             setFormData(prev => ({
@@ -75,7 +90,6 @@ const AddProduct = () => {
             }));
         }
 
-        // Clear error when user starts typing
         if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
@@ -84,34 +98,57 @@ const AddProduct = () => {
         }
     };
 
-    const handleImageChange = (e, type) => {
+    // ========================= SUBIR IMAGEN A IMGBB =========================
+    const handleImageUpload = async (e, type) => {
         const file = e.target.files[0];
-        if (file) {
-            // Validar tipo de archivo
-            if (!file.type.startsWith('image/')) {
-                alert('Por favor, selecciona un archivo de imagen válido');
-                return;
-            }
+        if (!file) return;
 
-            // Validar tamaño (max 5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                alert('La imagen no debe superar los 5MB');
-                return;
-            }
+        if (!file.type.startsWith('image/')) {
+            alert('Selecciona un archivo de imagen válido');
+            return;
+        }
 
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(prev => ({
-                    ...prev,
-                    [type]: reader.result
-                }));
-                setFormData(prev => ({
-                    ...prev,
-                    [type === 'principal' ? 'imgPrincipal' : 
-                     type === 'secundaria' ? 'imgSecundaria' : 'imgExtra']: reader.result
-                }));
-            };
-            reader.readAsDataURL(file);
+        if (file.size > 10 * 1024 * 1024) {
+            alert('La imagen no debe superar los 10MB');
+            return;
+        }
+
+        setUploadingImages(prev => ({ ...prev, [type]: true }));
+        setUploadProgress(prev => ({ ...prev, [type]: 0 }));
+
+        const interval = setInterval(() => {
+            setUploadProgress(prev => {
+                const p = prev[type];
+                if (p >= 90) return prev;
+                return { ...prev, [type]: p + 10 };
+            });
+        }, 200);
+
+        try {
+            const { url, preview } = await uploadToImgBB(file);
+
+            clearInterval(interval);
+            setUploadProgress(prev => ({ ...prev, [type]: 100 }));
+
+            setImagePreview(prev => ({ ...prev, [type]: preview }));
+
+            setFormData(prev => ({
+                ...prev,
+                [type === "principal" ? "imgPrincipal" :
+                 type === "secundaria" ? "imgSecundaria" :
+                 "imgExtra"]: url
+            }));
+
+            setTimeout(() => {
+                setUploadProgress(prev => ({ ...prev, [type]: 0 }));
+            }, 800);
+
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            alert("Error al subir la imagen: " + error.message);
+        } finally {
+            clearInterval(interval);
+            setUploadingImages(prev => ({ ...prev, [type]: false }));
         }
     };
 
@@ -125,7 +162,7 @@ const AddProduct = () => {
         if (formData.descuento < 0 || formData.descuento > 100) newErrors.descuento = 'El descuento debe estar entre 0 y 100';
         if (!formData.imgPrincipal) newErrors.imgPrincipal = 'La imagen principal es requerida';
         if (!formData.marca.id) newErrors.marca = 'La marca es requerida';
-        if (!formData.genero.id) newErrors.genero = 'El género es requerida';
+        if (!formData.genero.id) newErrors.genero = 'El género es requerido';
         if (!formData.categoria.id) newErrors.categoria = 'La categoría es requerida';
 
         setErrors(newErrors);
@@ -134,13 +171,19 @@ const AddProduct = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
-            alert('Por favor, corrige los errores en el formulario');
+            alert("Corrige los errores del formulario");
+            return;
+        }
+
+        if (uploadingImages.principal || uploadingImages.secundaria || uploadingImages.extra) {
+            alert("Espera a que se suban todas las imágenes");
             return;
         }
 
         setSubmitting(true);
+
         try {
             const productData = {
                 ...formData,
@@ -153,19 +196,20 @@ const AddProduct = () => {
             };
 
             await ProductoService.createProducto(productData);
-            alert('Producto creado exitosamente');
-            navigate('/Admin/HomeAdmin');
+            alert("Producto creado exitosamente");
+            navigate("/Admin/HomeAdmin");
+
         } catch (error) {
-            console.error('Error creating product:', error);
-            alert('Error al crear el producto. Por favor, intenta nuevamente.');
+            console.error("Error creating product:", error);
+            alert("Error al crear el producto.");
         } finally {
             setSubmitting(false);
         }
     };
 
     const handleCancel = () => {
-        if (window.confirm('¿Estás seguro de que quieres cancelar? Los cambios no guardados se perderán.')) {
-            navigate('/Admin/HomeAdmin');
+        if (window.confirm("¿Cancelar creación de producto?")) {
+            navigate("/Admin/HomeAdmin");
         }
     };
 
@@ -180,52 +224,33 @@ const AddProduct = () => {
 
     return (
         <div className="add-product-page">
-            {/* Header */}
             <div className="admin-header">
                 <div className="admin-title-section">
-                    <TextAtom variant="h1" className="admin-title">
-                        Agregar Nuevo Producto
-                    </TextAtom>
-                    <TextAtom variant="p" className="admin-subtitle">
-                        Completa la información del producto
-                    </TextAtom>
+                    <TextAtom variant="h1" className="admin-title">Agregar Nuevo Producto</TextAtom>
+                    <TextAtom variant="p" className="admin-subtitle">Completa la información del producto</TextAtom>
                 </div>
                 <div className="admin-buttons">
-                    <button 
-                        className="admin-btn secondary"
-                        onClick={handleCancel}
-                        disabled={submitting}
-                    >
-                        <TextAtom variant="span">Cancelar</TextAtom>
+                    <button className="admin-btn secondary" onClick={handleCancel} disabled={submitting}>
+                        Cancelar
                     </button>
-                    <button 
-                        className="admin-btn primary"
-                        onClick={handleSubmit}
-                        disabled={submitting}
-                    >
-                        <TextAtom variant="span">
-                            {submitting ? 'Guardando...' : 'Guardar Producto'}
-                        </TextAtom>
+                    <button className="admin-btn primary" onClick={handleSubmit} disabled={submitting}>
+                        {submitting ? "Guardando..." : "Guardar Producto"}
                     </button>
                 </div>
             </div>
 
-            {/* Formulario */}
             <div className="product-form-container">
                 <form className="product-form" onSubmit={handleSubmit}>
-                    {/* Información Básica */}
+                    
+                    {/* ==================== INFORMACIÓN BÁSICA ==================== */}
                     <div className="form-section">
-                        <TextAtom variant="h3" className="section-title">
-                            📋 Información Básica
-                        </TextAtom>
+                        <TextAtom variant="h3" className="section-title">📋 Información Básica</TextAtom>
+                        
                         <div className="form-grid">
                             <div className="form-group full-width">
-                                <TextAtom variant="label" htmlFor="nombre" className="form-label">
-                                    Nombre del Producto *
-                                </TextAtom>
+                                <TextAtom variant="label" className="form-label">Nombre del Producto *</TextAtom>
                                 <input
                                     type="text"
-                                    id="nombre"
                                     name="nombre"
                                     value={formData.nombre}
                                     onChange={handleInputChange}
@@ -240,11 +265,8 @@ const AddProduct = () => {
                             </div>
 
                             <div className="form-group full-width">
-                                <TextAtom variant="label" htmlFor="descripcion" className="form-label">
-                                    Descripción *
-                                </TextAtom>
+                                <TextAtom variant="label" className="form-label">Descripción *</TextAtom>
                                 <textarea
-                                    id="descripcion"
                                     name="descripcion"
                                     value={formData.descripcion}
                                     onChange={handleInputChange}
@@ -261,21 +283,17 @@ const AddProduct = () => {
                         </div>
                     </div>
 
-                    {/* Precio y Stock */}
+                    {/* ==================== PRECIO Y STOCK ==================== */}
                     <div className="form-section">
-                        <TextAtom variant="h3" className="section-title">
-                            💰 Precio y Inventario
-                        </TextAtom>
+                        <TextAtom variant="h3" className="section-title">💰 Precio y Inventario</TextAtom>
+                        
                         <div className="form-grid">
                             <div className="form-group">
-                                <TextAtom variant="label" htmlFor="precio" className="form-label">
-                                    Precio *
-                                </TextAtom>
+                                <TextAtom variant="label" className="form-label">Precio *</TextAtom>
                                 <div className="input-with-symbol">
                                     <TextAtom variant="span" className="input-symbol">$</TextAtom>
                                     <input
                                         type="number"
-                                        id="precio"
                                         name="precio"
                                         value={formData.precio}
                                         onChange={handleInputChange}
@@ -293,12 +311,9 @@ const AddProduct = () => {
                             </div>
 
                             <div className="form-group">
-                                <TextAtom variant="label" htmlFor="stock" className="form-label">
-                                    Stock *
-                                </TextAtom>
+                                <TextAtom variant="label" className="form-label">Stock *</TextAtom>
                                 <input
                                     type="number"
-                                    id="stock"
                                     name="stock"
                                     value={formData.stock}
                                     onChange={handleInputChange}
@@ -314,12 +329,9 @@ const AddProduct = () => {
                             </div>
 
                             <div className="form-group">
-                                <TextAtom variant="label" htmlFor="descuento" className="form-label">
-                                    Descuento (%)
-                                </TextAtom>
+                                <TextAtom variant="label" className="form-label">Descuento (%)</TextAtom>
                                 <input
                                     type="number"
-                                    id="descuento"
                                     name="descuento"
                                     value={formData.descuento}
                                     onChange={handleInputChange}
@@ -337,9 +349,7 @@ const AddProduct = () => {
 
                             {formData.descuento > 0 && (
                                 <div className="form-group">
-                                    <TextAtom variant="label" className="form-label">
-                                        Precio con Descuento
-                                    </TextAtom>
+                                    <TextAtom variant="label" className="form-label">Precio con Descuento</TextAtom>
                                     <div className="price-display">
                                         <TextAtom variant="strong" className="final-price">
                                             ${(formData.precio * (1 - formData.descuento / 100)).toFixed(2)}
@@ -353,18 +363,14 @@ const AddProduct = () => {
                         </div>
                     </div>
 
-                    {/* Categorización */}
+                    {/* ==================== CATEGORIZACIÓN ==================== */}
                     <div className="form-section">
-                        <TextAtom variant="h3" className="section-title">
-                            🏷️ Categorización
-                        </TextAtom>
+                        <TextAtom variant="h3" className="section-title">🏷️ Categorización</TextAtom>
+                        
                         <div className="form-grid">
                             <div className="form-group">
-                                <TextAtom variant="label" htmlFor="marca" className="form-label">
-                                    Marca *
-                                </TextAtom>
+                                <TextAtom variant="label" className="form-label">Marca *</TextAtom>
                                 <select
-                                    id="marca"
                                     name="marca.id"
                                     value={formData.marca.id}
                                     onChange={handleInputChange}
@@ -385,11 +391,8 @@ const AddProduct = () => {
                             </div>
 
                             <div className="form-group">
-                                <TextAtom variant="label" htmlFor="genero" className="form-label">
-                                    Género *
-                                </TextAtom>
+                                <TextAtom variant="label" className="form-label">Género *</TextAtom>
                                 <select
-                                    id="genero"
                                     name="genero.id"
                                     value={formData.genero.id}
                                     onChange={handleInputChange}
@@ -410,11 +413,8 @@ const AddProduct = () => {
                             </div>
 
                             <div className="form-group">
-                                <TextAtom variant="label" htmlFor="categoria" className="form-label">
-                                    Categoría *
-                                </TextAtom>
+                                <TextAtom variant="label" className="form-label">Categoría *</TextAtom>
                                 <select
-                                    id="categoria"
                                     name="categoria.id"
                                     value={formData.categoria.id}
                                     onChange={handleInputChange}
@@ -436,21 +436,18 @@ const AddProduct = () => {
                         </div>
                     </div>
 
-                    {/* Imágenes */}
+                    {/* ==================== IMÁGENES ==================== */}
                     <div className="form-section">
-                        <TextAtom variant="h3" className="section-title">
-                            🖼️ Imágenes del Producto
-                        </TextAtom>
-                        
+                        <TextAtom variant="h3" className="section-title">🖼️ Imágenes del Producto</TextAtom>
+
                         {/* Imagen Principal */}
                         <div className="image-upload-group">
-                            <TextAtom variant="label" className="form-label">
-                                Imagen Principal *
-                            </TextAtom>
+                            <TextAtom variant="label" className="form-label">Imagen Principal *</TextAtom>
+
                             <div className="image-upload-container">
                                 <div className="image-preview">
                                     {imagePreview.principal ? (
-                                        <img src={imagePreview.principal} alt="Vista previa principal" />
+                                        <img src={imagePreview.principal} alt="Preview" />
                                     ) : (
                                         <div className="image-placeholder">
                                             <TextAtom variant="span">📷</TextAtom>
@@ -458,31 +455,151 @@ const AddProduct = () => {
                                         </div>
                                     )}
                                 </div>
+
                                 <div className="upload-controls">
                                     <input
                                         type="file"
-                                        id="imgPrincipal"
                                         accept="image/*"
-                                        onChange={(e) => handleImageChange(e, 'principal')}
+                                        id="principalImg"
+                                        onChange={(e) => handleImageUpload(e, "principal")}
+                                        disabled={uploadingImages.principal}
                                         className="file-input"
                                     />
-                                    <TextAtom variant="label" htmlFor="imgPrincipal" className="upload-btn">
-                                        Seleccionar Imagen
-                                    </TextAtom>
-                                    <TextAtom variant="p" className="upload-hint">
-                                        Recomendado: 500x500px, max 5MB
-                                    </TextAtom>
+
+                                    <label htmlFor="principalImg" className="upload-btn">
+                                        {uploadingImages.principal ? "Subiendo..." : "Seleccionar Imagen"}
+                                    </label>
+
+                                    {uploadingImages.principal && (
+                                        <div className="progress-bar">
+                                            <div
+                                                className="progress-fill"
+                                                style={{ width: uploadProgress.principal + "%" }}
+                                            ></div>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
+
                             {errors.imgPrincipal && (
                                 <TextAtom variant="span" className="error-message">
                                     {errors.imgPrincipal}
                                 </TextAtom>
                             )}
                         </div>
+
+                        {/* Imágenes Secundaria y Extra */}
+                        <div className="form-grid">
+                            <div className="image-upload-group">
+                                <TextAtom variant="label" className="form-label">Imagen Secundaria</TextAtom>
+                                
+                                <div className="image-upload-container small">
+                                    <div className="image-preview">
+                                        {imagePreview.secundaria ? (
+                                            <img src={imagePreview.secundaria} alt="Preview secundaria" />
+                                        ) : (
+                                            <div className="image-placeholder">
+                                                <TextAtom variant="span">🖼️</TextAtom>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        id="secundariaImg"
+                                        onChange={(e) => handleImageUpload(e, "secundaria")}
+                                        disabled={uploadingImages.secundaria}
+                                        className="file-input"
+                                    />
+
+                                    <label htmlFor="secundariaImg" className="upload-btn small">
+                                        {uploadingImages.secundaria ? "Subiendo..." : "Seleccionar"}
+                                    </label>
+
+                                    {uploadingImages.secundaria && (
+                                        <div className="progress-bar">
+                                            <div
+                                                className="progress-fill"
+                                                style={{ width: uploadProgress.secundaria + "%" }}
+                                            ></div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="image-upload-group">
+                                <TextAtom variant="label" className="form-label">Imagen Extra</TextAtom>
+                                
+                                <div className="image-upload-container small">
+                                    <div className="image-preview">
+                                        {imagePreview.extra ? (
+                                            <img src={imagePreview.extra} alt="Preview extra" />
+                                        ) : (
+                                            <div className="image-placeholder">
+                                                <TextAtom variant="span">🖼️</TextAtom>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        id="extraImg"
+                                        onChange={(e) => handleImageUpload(e, "extra")}
+                                        disabled={uploadingImages.extra}
+                                        className="file-input"
+                                    />
+
+                                    <label htmlFor="extraImg" className="upload-btn small">
+                                        {uploadingImages.extra ? "Subiendo..." : "Seleccionar"}
+                                    </label>
+
+                                    {uploadingImages.extra && (
+                                        <div className="progress-bar">
+                                            <div
+                                                className="progress-fill"
+                                                style={{ width: uploadProgress.extra + "%" }}
+                                            ></div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Botones de Acción */}
+                    {/* ==================== CONFIGURACIONES ADICIONALES ==================== */}
+                    <div className="form-section">
+                        <TextAtom variant="h3" className="section-title">⚙️ Configuraciones Adicionales</TextAtom>
+                        
+                        <div className="checkbox-group">
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    name="destacado"
+                                    checked={formData.destacado}
+                                    onChange={handleInputChange}
+                                    className="checkbox-input"
+                                />
+                                <span className="checkbox-custom"></span>
+                                <TextAtom variant="span">Producto Destacado</TextAtom>
+                            </label>
+                            
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    name="activo"
+                                    checked={formData.activo}
+                                    onChange={handleInputChange}
+                                    className="checkbox-input"
+                                />
+                                <span className="checkbox-custom"></span>
+                                <TextAtom variant="span">Producto Activo</TextAtom>
+                            </label>
+                        </div>
+                    </div>
+
+                    {/* ==================== ACCIONES ==================== */}
                     <div className="form-actions">
                         <button
                             type="button"
@@ -490,8 +607,9 @@ const AddProduct = () => {
                             onClick={handleCancel}
                             disabled={submitting}
                         >
-                            <TextAtom variant="span">Cancelar</TextAtom>
+                            Cancelar
                         </button>
+
                         <button
                             type="submit"
                             className="admin-btn primary large"
@@ -499,14 +617,14 @@ const AddProduct = () => {
                         >
                             {submitting ? (
                                 <>
-                                    <div className="mini-spinner"></div>
-                                    <TextAtom variant="span">Guardando...</TextAtom>
+                                    <div className="mini-spinner"></div> Guardando...
                                 </>
                             ) : (
-                                <TextAtom variant="span">Guardar Producto</TextAtom>
+                                "Guardar Producto"
                             )}
                         </button>
                     </div>
+
                 </form>
             </div>
         </div>
