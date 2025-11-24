@@ -1,30 +1,37 @@
 import { lazy } from 'react';
 
-// Lazy loading
 const Home = lazy(() => import('../pages/user/Home'));
-const Login = lazy(() => import('../pages/auth/Login'));
-const CreateUser = lazy(() => import('../pages/auth/CreateUser'));
-const HomeAdmin = lazy(() => import('../pages/admin/HomeAdmin'));
-const HomeProducto = lazy(() => import('../pages/admin/Productos/HomeProductos')); 
+const About = lazy(() => import('../pages/user/About'));
+const Contact = lazy(() => import('../pages/user/Contact'));
+const PerfilUsuario = lazy(() => import('../pages/user/PerfilUsuario'));
+const ProductosUser = lazy(() => import('../pages/user/ProductosUser'));
 
-// Rutas públicas
+const AuthPanel = lazy(() => import('../pages/auth/AuthPanel'));
+
+const HomeAdmin = lazy(() => import('../pages/admin/HomeAdmin'));
+const AddProduct = lazy(() => import('../pages/admin/AddProduct'));
+
 const publicRoutes = [
   { path: '/', element: <Home />, showNavbar: true },
-  { path: '/login', element: <Login />, showNavbar: false },
-  { path: '/CreateUser', element: <CreateUser />, showNavbar: false },
+  { path: '/about', element: <About />, showNavbar: true },
+  { path: '/contact', element: <Contact />, showNavbar: true },
+  { path: '/login', element: <AuthPanel />, showNavbar: false },
+  { path: '/register', element: <AuthPanel />, showNavbar: false },
+  { path: '/perfil', element: <PerfilUsuario />, showNavbar: true },
+  { path: '/ProductosUser', element: <ProductosUser />, showNavbar: true },
 ];
 
-// Rutas admin
 const adminRoutes = [
-  { path: '/admin/dashboard', element: <HomeAdmin />, isAdmin: true },
-  { path: '/admin/productos', element: <HomeProducto />, isAdmin: true }, 
+  { path: '/Admin/HomeAdmin', element: <HomeAdmin />, isAdmin: true, showNavbar: true },
+  { path: '/admin/AddProduct', element: <AddProduct />, isAdmin: true, showNavbar: true },
 ];
 
-// Ruta 404
+
 const notFoundRoute = {
   path: '*',
   element: <div className="text-center py-10 text-2xl">404 - Página no encontrada u.u</div>,
   showNavbar: false,
 };
 
+// Exportar todas las rutas en un solo arreglo
 export const appRoutes = [...publicRoutes, ...adminRoutes, notFoundRoute];
