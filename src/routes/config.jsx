@@ -5,6 +5,7 @@ const About = lazy(() => import('../pages/user/About'));
 const Contact = lazy(() => import('../pages/user/Contact'));
 const PerfilUsuario = lazy(() => import('../pages/user/PerfilUsuario'));
 const ProductosUser = lazy(() => import('../pages/user/ProductosUser'));
+const Carrito = lazy(() => import('../pages/user/Carrito')); // ✅ carrito
 
 const AuthPanel = lazy(() => import('../pages/auth/AuthPanel'));
 
@@ -13,19 +14,18 @@ const AddProduct = lazy(() => import('../pages/admin/AddProduct'));
 
 const publicRoutes = [
   { path: '/', element: <Home />, showNavbar: true },
-  { path: '/productos', element: <ProductosUser />, showNavbar: true },
   { path: '/about', element: <About />, showNavbar: true },
   { path: '/contact', element: <Contact />, showNavbar: true },
   { path: '/login', element: <AuthPanel />, showNavbar: false },
   { path: '/register', element: <AuthPanel />, showNavbar: false },
   { path: '/perfil', element: <PerfilUsuario />, showNavbar: true },
+  { path: '/ProductosUser', element: <ProductosUser />, showNavbar: true },
+  { path: '/Carrito', element: <Carrito />, showNavbar: true }, // 
 ];
 
 const adminRoutes = [
-  { path: '/admin/home', element: <HomeAdmin />, isAdmin: true },
-  { path: '/admin/add-product', element: <AddProduct />, isAdmin: true },
-  { path: '/perfil', element: <PerfilUsuario />, showNavbar: true }, // admin también puede acceder al perfil
-  { path: '/productos', element: <ProductosUser />, showNavbar: true }, // admin puede ver productos también
+  { path: '/Admin/HomeAdmin', element: <HomeAdmin />, isAdmin: true },
+  { path: '/admin/AddProduct', element: <AddProduct />, isAdmin: true },
 ];
 
 const notFoundRoute = {
