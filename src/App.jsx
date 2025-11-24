@@ -49,4 +49,8 @@ function App() {
   return <Layout />;
 }
 
+<<<<<<< Updated upstream
 export default App;
+=======
+export default App;
+>>>>>>> Stashed changes
