@@ -14,8 +14,8 @@ export const publicRoutes = [
   { path: "/", element: <Home />, showNavbar: true },
   { path: "/about", element: <About />, showNavbar: true },
   { path: "/contact", element: <Contact />, showNavbar: true },
-  { path: "/login", element: <AuthPanel />, showNavbar: true },
-  { path: "/register", element: <AuthPanel />, showNavbar: true },
+  { path: "/login", element: <AuthPanel />, showNavbar: false },
+  { path: "/register", element: <AuthPanel />, showNavbar: false },
   { path: "/perfil", element: <PerfilUsuario />, showNavbar: true },
   { path: "/carrito", element: <Carrito />, showNavbar: true },
 ];

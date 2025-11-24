@@ -8,8 +8,14 @@ import { appRoutes } from "./routes/config";
 function Layout() {
   const location = useLocation();
 
-  const isAdminRoute = location.pathname.startsWith("/admin");
-  const currentRoute = appRoutes.find(route => route.path === location.pathname);
+  // Convertimos a minúsculas para evitar problemas con mayúsculas
+  const path = location.pathname.toLowerCase();
+  const isAdminRoute = path.startsWith("/admin");
+
+  const currentRoute = appRoutes.find(
+    route => route.path.toLowerCase() === path
+  );
+
   const showNavbar = isAdminRoute || currentRoute?.showNavbar;
 
   const navbarTitle = isAdminRoute ? "ZAPA STORE Admin" : "ZAPA STORE";
