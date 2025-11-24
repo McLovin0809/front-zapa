@@ -87,7 +87,7 @@ const CreateUser = () => {
       generarMensaje("Usuario creado correctamente", "success");
 
       // Redirige al perfil del usuario recién creado
-      setTimeout(() => navigate(`/perfil/${response.data.idUsuario}`), 800);
+      setTimeout(() => navigate(`/login`), 800);
     } catch (error) {
       console.error("Error al registrar usuario:", error.response?.data);
       const msg = error.response?.data?.message || "Error al crear usuario. Verifica los datos o si el email ya existe.";
