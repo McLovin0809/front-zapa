@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/categorias";
+const API_URL = "https://backend-zapa.onrender.com/api/categorias";
 
 class CategoriaService {
   getCategorias() {
@@ -36,4 +36,4 @@ class CategoriaService {
   }
 }
 
-export default new CategoriaService();   // 👈 ahora sí existe
+export default new CategoriaService();
