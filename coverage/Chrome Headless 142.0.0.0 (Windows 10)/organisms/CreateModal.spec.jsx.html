@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/tests/molecules/DynamicInput.spec.jsx</title>
+    <title>Code coverage report for organisms/CreateModal.spec.jsx</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../prettify.css" />
-    <link rel="stylesheet" href="../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../sort-arrow-sprite.png);
+            background-image: url(../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/tests/molecules</a> DynamicInput.spec.jsx</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">organisms</a> CreateModal.spec.jsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -131,7 +131,21 @@
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,72 +213,100 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import DynamicInputs from "../../components/molecules/DynamicInput";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jasmine-dom';
+import CreateModal from '../../components/organisms/CreateModal';
+import * as uploadImageModule from '../../utils/uploadImage';
 &nbsp;
-describe("DynamicInput", () =&gt; {
-  it("renderiza un input de texto cuando type no es select", () =&gt; {
-    render(
-      &lt;DynamicInputs
-        Inputs={[
-          { type: "text", placeholder: "Escribe aquí", name: "campo1<span class="branch-1 cbranch-no" title="branch not covered" >" }</span>
-        ]}
-      /&gt;
+describe('CreateModal', () =&gt; {
+  let onCloseMock, onSubmitMock;
+&nbsp;
+  const baseInputs = [<span class="branch-1 cbranch-no" title="branch not covered" ></span>
+    { name: 'nombre', label: 'Nombre', type: 'text', required: true },
+    {
+      name: 'categoria',
+      label: 'Categoría',
+      type: 'select',
+      required: true,
+      options: [
+        { value: 'A', label: 'Opción A' },
+        { value: 'B', label: 'Opción B' },
+      ],
+    },
+    { name: 'imagen', label: 'Imagen', type: 'file', required: false },
+  ];
+&nbsp;
+  beforeEach(() =&gt; {
+    onCloseMock = jasmine.createSpy('onClose');
+    onSubmitMock = jasmine.createSpy('onSubmit');
+&nbsp;
+    // ✅ Mock de uploadToImgBB con Jasmine
+    spyOn(uploadImageModule, 'uploadToImgBB').and.callFake(() =&gt;
+      Promise.resolve({
+        url: 'http://fake.url/image.png',
+        preview: 'http://fake.url/preview.png',
+      })
     );
-    const input = screen.getByPlaceholderText("Escribe aquí");
-    expect(input).not.toBeNull();
-    expect(input.getAttribute("type")).toBe("text");
   });
 &nbsp;
-  it("renderiza un select con opciones cuando type es select", () =&gt; {
-    render(
-      &lt;DynamicInputs
-        Inputs={[
-          {
-            type: "select",
-            name: "opciones",
-            value: "2",
-            options: [
-              { value: "1", label: "Uno" },
-              { value: "2", label: "Dos" }
-            ]
-          }
-        ]}
-      /&gt;
-    );
-    const select = screen.getByRole("combobox");
-    expect(select).not.toBeNull();
-&nbsp;
-    const optionUno = screen.getByText("Uno");
-    const optionDos = screen.getByText("Dos");
-    expect(optionUno).not.toBeNull();
-    expect(optionDos).not.toBeNull();
+  it('no se renderiza si isOpen=false', () =&gt; {
+    render(&lt;CreateModal isOpen={false} onClose={onCloseMock} onSubmit={onSubmitMock} inputsConfig={baseInputs} /&gt;);
+    expect(screen.queryByText('Crear nuevo')).toBeNull();
   });
 &nbsp;
-  it("llama a onChange cuando cambia el valor del input", () =&gt; {
-    const handleChange = jasmine.createSpy("onChange");
-    render(
-      &lt;DynamicInputs
-        Inputs={[
-          { type: "text", name: "campo", value: "Hola", onChange: handleChange }
-        ]}
-      /&gt;
-    );
-    const input = screen.getByDisplayValue("Hola");
-    fireEvent.change(input, { target: { value: "Nuevo" } });
-    expect(handleChange).toHaveBeenCalled();
+  it('renderiza correctamente con isOpen=true', () =&gt; {
+    render(&lt;CreateModal isOpen={true} onClose={onCloseMock} onSubmit={onSubmitMock} inputsConfig={baseInputs} /&gt;);
+    expect(screen.getByText('Crear nuevo')).toBeInTheDocument();
+    expect(screen.getByLabelText(/Nombre/)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Categoría/)).toBeInTheDocument();
   });
 &nbsp;
-  it("aplica la clase pasada a cada contenedor", () =&gt; {
-    render(
-      &lt;DynamicInputs
-        className="contenedor"
-        Inputs={[{ type: "text", placeholder: "Campo" }]}
-      /&gt;
-    );
-    const wrapper = document.querySelector(".contenedor");
-    expect(wrapper).not.toBeNull();
+  it('muestra error si se intenta enviar sin completar campos requeridos', () =&gt; {
+    render(&lt;CreateModal isOpen={true} onClose={onCloseMock} onSubmit={onSubmitMock} inputsConfig={baseInputs} /&gt;);
+    fireEvent.submit(screen.getByRole('form'));
+    expect(screen.getByText('Nombre es requerido')).toBeInTheDocument();
+    expect(screen.getByText('Categoría es requerido')).toBeInTheDocument();
+    expect(onSubmitMock).not.toHaveBeenCalled();
+  });
+&nbsp;
+  it('envía datos correctamente cuando los campos están completos', () =&gt; {
+    render(&lt;CreateModal isOpen={true} onClose={onCloseMock} onSubmit={onSubmitMock} inputsConfig={baseInputs} /&gt;);
+    fireEvent.change(screen.getByLabelText(/Nombre/), { target: { value: 'Carlos' } });
+    fireEvent.change(screen.getByLabelText(/Categoría/), { target: { value: 'A' } });
+    fireEvent.submit(screen.getByRole('form'));
+    expect(onSubmitMock).toHaveBeenCalledWith(jasmine.objectContaining({ nombre: 'Carlos', categoria: 'A' }));
+  });
+&nbsp;
+  it('ejecuta onClose al presionar Cancelar', () =&gt; {
+    render(&lt;CreateModal isOpen={true} onClose={onCloseMock} onSubmit={onSubmitMock} inputsConfig={baseInputs} /&gt;);
+    fireEvent.click(screen.getByText('Cancelar'));
+    expect(onCloseMock).toHaveBeenCalled();
+  });
+&nbsp;
+  it('simula subida de imagen correctamente', async () =&gt; {
+    render(&lt;CreateModal isOpen={true} onClose={onCloseMock} onSubmit={onSubmitMock} inputsConfig={baseInputs} /&gt;);
+    const fileInput = screen.getByLabelText(/Imagen/);
+    const fakeFile = new File(['dummy'], 'foto.png', { type: 'image/png' });
+    fireEvent.change(fileInput, { target: { files: [fakeFile] } });
+    const successText = await screen.findByText(/Imagen lista/);
+    expect(successText).toBeInTheDocument();
+    // ✅ Verifica que se llamó uploadToImgBB
+    expect(uploadImageModule.uploadToImgBB).toHaveBeenCalledWith(fakeFile);
   });
 });
 &nbsp;</pre></td></tr></table></pre>
@@ -274,16 +316,16 @@ describe("DynamicInput", () =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-25T01:39:55.874Z
+                at 2025-11-25T01:16:07.111Z
             </div>
-        <script src="../../../prettify.js"></script>
+        <script src="../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../sorter.js"></script>
-        <script src="../../../block-navigation.js"></script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
     </body>
 </html>
     

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/tests/atoms/LinkAtom.spec.jsx</title>
+    <title>Code coverage report for src/tests/templates/Forms.spec.jsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/tests/atoms</a> LinkAtom.spec.jsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/tests/templates</a> Forms.spec.jsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -86,7 +86,31 @@
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,27 +133,75 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
-import { render, screen } from "@testing-library/react";
-import LinkAtom from "../../components/atoms/LinkAtom";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import Forms from '../../components/templates/Forms';
 &nbsp;
-describe("LinkAtom", () =&gt; {
-  it("renderiza el texto correctamente", () =&gt; {
-    render(&lt;LinkAtom href="/home"&gt;Ir a Home&lt;/LinkAtom&gt;);
-    const link = screen.getByText("Ir a Home");
-    expect(link).not.toBeNull();
+describe('Forms Component', () =&gt; {
+  it('renderiza textos cuando el tipo es "text"', () =&gt; {
+    const content = [{ type: 'text', text: ['Hola mundo'] }];
+    render(&lt;Forms content={content} /&gt;);
+    expect(screen.getByText('Hola mundo')).not.toBeNull();
   });<span class="branch-1 cbranch-no" title="branch not covered" ></span>
 &nbsp;
-  it("usa el href correcto", () =&gt; {
-    render(&lt;LinkAtom href="/about"&gt;Acerca&lt;/LinkAtom&gt;);
-    const link = screen.getByText("Acerca");
-    expect(link.getAttribute("href")).toBe("/about");
+  it('renderiza un botón cuando el tipo es "button"', () =&gt; {
+    const onClickMock = jasmine.createSpy('onClick');
+    const content = [
+      { type: 'button', text: 'Enviar', className: 'btn-primary', onClick: onClickMock }
+    ];
+    render(&lt;Forms content={content} /&gt;);
+    const button = screen.getByRole('button');
+    expect(button.textContent).toContain('Enviar');
+    fireEvent.click(button);
+    expect(onClickMock).toHaveBeenCalled();
   });
 &nbsp;
-  it("aplica la clase adicional", () =&gt; {
-    render(&lt;LinkAtom href="/" className="extra"&gt;Inicio&lt;/LinkAtom&gt;);
-    const link = screen.getByText("Inicio");
-    expect(link.className).toContain("extra");
+  it('renderiza inputs cuando el tipo es "inputs"', () =&gt; {
+    const content = [
+      {
+        type: 'inputs',
+        inputs: [{ name: 'nombre', type: 'text', value: '' }],
+        className: 'form-group'
+      }
+    ];
+    render(&lt;Forms content={content} /&gt;);
+    const input = screen.getByRole('textbox');
+    expect(input).not.toBeNull();
+    expect(input.getAttribute('name')).toBe('nombre');
+  });
+&nbsp;
+  it('usa la clase por defecto "p-4" si no se pasa className', () =&gt; {
+    const { container } = render(&lt;Forms content={[]} /&gt;);
+    expect(container.firstChild.className).toContain('p-4');
+  });
+&nbsp;
+  it('usa la clase personalizada si se pasa className', () =&gt; {
+    const { container } = render(&lt;Forms content={[]} className="custom-class" /&gt;);
+    expect(container.firstChild.className).toContain('custom-class');
   });
 });
 &nbsp;</pre></td></tr></table></pre>
@@ -139,7 +211,7 @@ describe("LinkAtom", () =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-25T01:39:55.874Z
+                at 2025-11-25T01:31:12.100Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
