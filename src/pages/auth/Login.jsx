@@ -16,45 +16,56 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!form.email || !form.clave) {
-      alert("Completa todos los campos");
-      return;
-    }
+  if (!form.email || !form.clave) {
+    alert("Completa todos los campos");
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const response = await UsuarioService.login({
-        email: form.email,
-        clave: form.clave,
+  try {
+    const response = await UsuarioService.login({
+      email: form.email,
+      clave: form.clave,
+    });
+
+    console.log("Login OK:", response.data);
+
+    // ✅ GUARDAR TOKEN
+    localStorage.setItem("token", response.data.token);
+
+    // ✅ GUARDAR SOLO DATOS DEL USUARIO
+    localStorage.setItem(
+      "usuario",
+      JSON.stringify({
+        nombre: response.data.usuario,
+        email: response.data.email
+      })
+    );
+
+    // ✅ CONTEXTO
+    if (login) {
+      login({
+        nombre: response.data.usuario,
+        email: response.data.email
       });
-
-      console.log("Login OK:", response.data);
-
-      // ✅ GUARDAR TOKEN Y USUARIO
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("usuario", JSON.stringify(response.data));
-
-      // ✅ CONTEXTO
-      if (login) login(response.data);
-
-      const userEmail = response.data.email;
-
-      if (userEmail && userEmail.toLowerCase().includes("admin")) {
-        setTimeout(() => navigate("/Admin/HomeAdmin"), 500);
-      } else {
-        setTimeout(() => navigate("/perfil"), 500);
-      }
-
-    } catch (error) {
-      console.error("Error en login:", error.response?.data);
-      alert("Correo o contraseña incorrectos");
-    } finally {
-      setLoading(false);
     }
-  };
+
+    if (response.data.email.toLowerCase().includes("admin")) {
+      setTimeout(() => navigate("/Admin/HomeAdmin"), 500);
+    } else {
+      setTimeout(() => navigate("/perfil"), 500);
+    }
+
+  } catch (error) {
+    console.error("Error en login:", error.response?.data);
+    alert("Correo o contraseña incorrectos");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const loginData = [
     {
