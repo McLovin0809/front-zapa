@@ -6,16 +6,17 @@ module.exports = function (config) {
     'src/test/setupTests.js',
     'src/**/*.spec.jsx',
   ],
+
    preprocessors: {
-     'src/**/*.spec.jsx': ['webpack'],
-     'src/**/*.jsx': ['coverage'],
+     'src/test/setupTests.js': ['webpack'],
+     'src/test/**/*.spec.jsx': ['webpack']
    },
    webpack: {
      mode: 'development',
      module: {
        rules: [
          {
-           test: /.jsx?$/,
+           test: /\.jsx?$/,
            exclude: /node_modules/,
            use: {
              loader: 'babel-loader',
@@ -25,7 +26,7 @@ module.exports = function (config) {
            },
          },
          {
-           test: /.css$/,
+           test: /\.css$/,
            use: ['style-loader', 'css-loader'],
          },
        ],
