@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import VentaService from "../../services/VentaService";
+import ProductoService from "../../services/ProductoService"; // 👈 usamos ProductoService
 import axios from "axios";
 import "../../style/pages/Carrito.css";
 
@@ -34,6 +36,7 @@ const Carrito = () => {
     }
 
     try {
+      // Crear la venta usando VentaService
       const venta = {
         usuario: { idUsuario: usuario.idUsuario },
         fechaVenta: new Date().toISOString(),
@@ -42,12 +45,10 @@ const Carrito = () => {
         metodoPago: { idMetodoPago: 1 }
       };
 
-      const ventaRes = await axios.post(
-        "https://backend-zapa.onrender.com/api/ventas",
-        venta
-      );
+      const ventaRes = await VentaService.createVenta(venta);
       const idVenta = ventaRes.data.idVenta;
 
+      // Registrar detalles y descontar stock
       for (const item of carrito) {
         const detalle = {
           venta: { idVenta },
@@ -55,10 +56,22 @@ const Carrito = () => {
           cantidad: item.cantidad,
           subtotal: item.precio * item.cantidad
         };
+
+        // Guardar detalle de venta
         await axios.post(
           "https://backend-zapa.onrender.com/api/productos-venta",
           detalle
         );
+
+        // Descontar stock del producto
+        try {
+          const resStock = await ProductoService.descontarStock(item.idProducto, item.cantidad);
+          console.log(`Stock actualizado para ${item.nombre}:`, resStock.data.stock);
+        } catch (err) {
+          console.error(`Error al descontar stock de ${item.nombre}:`, err.response?.data || err.message);
+          alert(`No hay suficiente stock para "${item.nombre}". Compra detenida.`);
+          return;
+        }
       }
 
       alert("Compra realizada con éxito");
@@ -66,7 +79,7 @@ const Carrito = () => {
       navigate("/perfil");
     } catch (error) {
       console.error("Error al comprar:", error.response?.data || error.message);
-      alert("Hubo un problema al procesar la compra");
+      alert(`Error al procesar la compra: ${error.response?.data?.message || error.message}`);
     }
   };
 
