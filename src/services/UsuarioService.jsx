@@ -1,63 +1,33 @@
-import axios from 'axios';
+// src/services/UsuarioService.js
+import axios from "axios";
 
 const BASE_URL = "https://backend-zapa.onrender.com/api/usuarios";
 
-// ✅ FUNCIÓN QUE AGREGA EL TOKEN A TODAS LAS PETICIONES PROTEGIDAS
-const authHeader = () => {
-  const token = localStorage.getItem("token");
-  return {
-    Authorization: `Bearer ${token}`
-  };
-};
-
 class UsuarioService {
-
-  // ✅ Obtener todos los usuarios (PROTEGIDO)
   getAllUsuarios() {
-    return axios.get(BASE_URL, { headers: authHeader() });
+    return axios.get(BASE_URL);
   }
-
-  // ✅ Obtener usuario por ID (PROTEGIDO)
   getUsuarioById(id) {
-    return axios.get(`${BASE_URL}/${id}`, { headers: authHeader() });
+    return axios.get(`${BASE_URL}/${id}`);
   }
-
-  // ✅ Crear usuario (PROTEGIDO)
   createUsuario(usuario) {
-    return axios.post(BASE_URL, usuario, { headers: authHeader() });
+    return axios.post(BASE_URL, usuario);
   }
-
-  // ✅ Actualizar usuario completo (PROTEGIDO)
   updateUsuario(id, usuario) {
-    return axios.put(`${BASE_URL}/${id}`, usuario, { headers: authHeader() });
+    return axios.put(`${BASE_URL}/${id}`, usuario);
   }
-
-  // ✅ Actualizar usuario parcial (PROTEGIDO)
-  updateUsuarioParcial(id, datos) {
-    return axios.patch(`${BASE_URL}/${id}`, datos, { headers: authHeader() });
-  }
-
-  // ✅ Eliminar usuario (PROTEGIDO)
   deleteUsuario(id) {
-    return axios.delete(`${BASE_URL}/${id}`, { headers: authHeader() });
+    return axios.delete(`${BASE_URL}/${id}`);
   }
-
-  // ✅ Buscar usuario por email (PROTEGIDO)
   buscarPorEmail(email) {
-    return axios.get(`${BASE_URL}/buscar/${email}`, { headers: authHeader() });
+    return axios.get(`${BASE_URL}/buscar/${email}`);
   }
-
-  // ✅ Buscar usuarios por rol (PROTEGIDO)
   buscarPorRol(rol) {
-    return axios.get(`${BASE_URL}/rol/${rol}`, { headers: authHeader() });
+    return axios.get(`${BASE_URL}/rol/${rol}`);
   }
-
-  // ⚠️ Este NO debe llevar token
   healthCheck() {
     return axios.get(`${BASE_URL}/health`);
   }
-
-  // ✅ LOGIN → ESTE NO LLEVA TOKEN
   login({ email, clave }) {
     return axios.post(`${BASE_URL}/login`, { email, clave });
   }
