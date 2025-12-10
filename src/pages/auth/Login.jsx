@@ -33,10 +33,15 @@ const Login = () => {
       });
 
       generarMensaje("Login exitoso", "success");
+
+      // GUARDAMOS TOKEN JWT
+      localStorage.setItem("token", response.data.token);
+
       login(response.data);
       localStorage.setItem("usuario", JSON.stringify(response.data)); // ✅ persistencia
 
       const userEmail = response.data.email;
+
       if (userEmail && userEmail.toLowerCase().includes("admin")) {
         setTimeout(() => navigate("/Admin/HomeAdmin"), 800);
       } else {
