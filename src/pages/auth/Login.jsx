@@ -33,30 +33,32 @@ const Login = () => {
 
       generarMensaje("Login exitoso", "success");
 
-      // GUARDAMOS TOKEN JWT
+      // ✅ GUARDAR TOKEN Y USUARIO
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("usuario", JSON.stringify(response.data));
 
-      llogin(response.data);
-      localStorage.setItem("token", response.data.token); // ✅ GUARDA EL TOKEN
-      localStorage.setItem("usuario", JSON.stringify(response.data)); // ✅ USUARIO
+      // ✅ CONTEXTO
+      login(response.data);
 
       const userEmail = response.data.email;
 
       if (userEmail && userEmail.toLowerCase().includes("admin")) {
         setTimeout(() => navigate("/Admin/HomeAdmin"), 800);
       } else {
-        setTimeout(() => navigate("/perfil"), 800); // ✅ redirige al perfil
+        setTimeout(() => navigate("/perfil"), 800);
       }
+
     } catch (error) {
       console.error("Error en login:", error.response?.data);
 
-      if (error.response?.status === 404 || error.response?.data?.message === "Usuario no encontrado") {
-        generarMensaje("El usuario no existe. Verifica tu correo.", "error");
+      if (error.response?.status === 404) {
+        generarMensaje("El usuario no existe.", "error");
       } else if (error.response?.status === 401) {
-        generarMensaje("Credenciales inválidas. Verifica tu email y contraseña.", "error");
+        generarMensaje("Credenciales incorrectas.", "error");
       } else {
-        generarMensaje("Error al iniciar sesión. Intenta nuevamente.", "error");
+        generarMensaje("Error al iniciar sesión.", "error");
       }
+
     } finally {
       setLoading(false);
     }
