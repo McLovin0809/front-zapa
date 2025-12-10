@@ -19,7 +19,7 @@ const Login = () => {
     e.preventDefault();
 
     if (!form.email || !form.clave) {
-      generarMensaje("Completa todos los campos", "warning");
+      alert("Completa todos los campos");
       return;
     }
 
@@ -31,34 +31,26 @@ const Login = () => {
         clave: form.clave,
       });
 
-      generarMensaje("Login exitoso", "success");
+      console.log("Login OK:", response.data);
 
       // ✅ GUARDAR TOKEN Y USUARIO
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("usuario", JSON.stringify(response.data));
 
       // ✅ CONTEXTO
-      login(response.data);
+      if (login) login(response.data);
 
       const userEmail = response.data.email;
 
       if (userEmail && userEmail.toLowerCase().includes("admin")) {
-        setTimeout(() => navigate("/Admin/HomeAdmin"), 800);
+        setTimeout(() => navigate("/Admin/HomeAdmin"), 500);
       } else {
-        setTimeout(() => navigate("/perfil"), 800);
+        setTimeout(() => navigate("/perfil"), 500);
       }
 
     } catch (error) {
       console.error("Error en login:", error.response?.data);
-
-      if (error.response?.status === 404) {
-        generarMensaje("El usuario no existe.", "error");
-      } else if (error.response?.status === 401) {
-        generarMensaje("Credenciales incorrectas.", "error");
-      } else {
-        generarMensaje("Error al iniciar sesión.", "error");
-      }
-
+      alert("Correo o contraseña incorrectos");
     } finally {
       setLoading(false);
     }

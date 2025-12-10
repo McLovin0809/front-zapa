@@ -3,7 +3,6 @@ import axios from 'axios';
 
 const BASE_URL = 'https://backend-zapa.onrender.com/api/productos';
 
-// AGREGA TOKEN JWT A TODAS LAS PETICIONES
 const authHeader = () => {
   const token = localStorage.getItem("token");
   return {

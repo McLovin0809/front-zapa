@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Forms from "../../components/templates/Forms";
-import { generarMensaje } from "../../utils/GenerarMensaje";
 import UsuarioService from "../../services/UsuarioService";
 import "../../style/pages/AuthPanel.css";
 
@@ -52,10 +51,11 @@ const CreateUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { nombre, email, clave, telefono, direccion } = form;
+
+    const { nombre, email, clave, direccion } = form;
 
     if (!nombre || !email || !clave || !direccion.calle || !direccion.numero || !direccion.idComuna) {
-      generarMensaje("Completa todos los campos obligatorios", "warning");
+      alert("Completa todos los campos obligatorios");
       return;
     }
 
@@ -63,7 +63,7 @@ const CreateUser = () => {
     if (email.endsWith("@admin.com")) rolId = 1;
     else if (email.endsWith("@cliente.com")) rolId = 2;
     else {
-      generarMensaje("El correo debe terminar en @admin.com o @cliente.com", "error");
+      alert("El correo debe terminar en @admin.com o @cliente.com");
       return;
     }
 
@@ -74,7 +74,7 @@ const CreateUser = () => {
         nombre,
         email,
         clave,
-        telefono: telefono || null,
+        telefono: form.telefono || null,
         rol: { idRol: rolId },
         direccion: {
           calle: direccion.calle,
@@ -83,15 +83,14 @@ const CreateUser = () => {
         }
       };
 
-      const response = await UsuarioService.createUsuario(usuario);
-      generarMensaje("Usuario creado correctamente", "success");
+      await UsuarioService.createUsuario(usuario);
 
-      // Redirige al perfil del usuario recién creado
-      setTimeout(() => navigate(`/login`), 800);
+      alert("Usuario creado correctamente");
+      navigate("/login");
+
     } catch (error) {
-      console.error("Error al registrar usuario:", error.response?.data);
-      const msg = error.response?.data?.message || "Error al crear usuario. Verifica los datos o si el email ya existe.";
-      generarMensaje(msg, "error");
+      console.error("Error al crear usuario:", error.response?.data);
+      alert("Error al crear usuario. Puede que el correo ya exista.");
     } finally {
       setLoading(false);
     }
@@ -107,10 +106,10 @@ const CreateUser = () => {
     {
       type: "inputs",
       inputs: [
-        { type: "text", placeholder: "Nombre completo", name: "nombre", value: form.nombre, onChange: handleChange, required: true, autoComplete: "name", className: "auth-input" },
-        { type: "email", placeholder: "Correo electrónico (@admin o @cliente))", name: "email", value: form.email, onChange: handleChange, required: true, autoComplete: "email", className: "auth-input" },
-        { type: "password", placeholder: "Contraseña", name: "clave", value: form.clave, onChange: handleChange, required: true, autoComplete: "new-password", className: "auth-input" },
-        { type: "text", placeholder: "Teléfono (opcional)", name: "telefono", value: form.telefono, onChange: handleChange, autoComplete: "tel", className: "auth-input" },
+        { type: "text", placeholder: "Nombre completo", name: "nombre", value: form.nombre, onChange: handleChange, required: true, className: "auth-input" },
+        { type: "email", placeholder: "Correo electrónico", name: "email", value: form.email, onChange: handleChange, required: true, className: "auth-input" },
+        { type: "password", placeholder: "Contraseña", name: "clave", value: form.clave, onChange: handleChange, required: true, className: "auth-input" },
+        { type: "text", placeholder: "Teléfono (opcional)", name: "telefono", value: form.telefono, onChange: handleChange, className: "auth-input" },
         { type: "text", placeholder: "Calle", name: "direccion.calle", value: form.direccion.calle, onChange: handleChange, required: true, className: "auth-input" },
         { type: "text", placeholder: "Número", name: "direccion.numero", value: form.direccion.numero, onChange: handleChange, required: true, className: "auth-input" },
         { type: "select", name: "direccion.idComuna", value: form.direccion.idComuna, onChange: handleChange, options: comunaOptions, required: true, className: "auth-input" }
