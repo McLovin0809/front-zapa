@@ -40,3 +40,4 @@ describe('Footer Component', () => {
     ).not.toBeNull();
   });
 });
+  
