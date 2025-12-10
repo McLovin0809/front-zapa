@@ -182,18 +182,6 @@ const Home = () => {
           </div>
         )}
 
-        <div className="productos-contador">
-          <TextAtom variant="p" className="contador-text">
-            Mostrando {productos.length} producto{productos.length !== 1 ? 's' : ''}
-          </TextAtom>
-        </div>
-
-        {/* ✅ Mensaje visual */}
-        {mensaje && (
-          <div className="mensaje-toast">
-            {mensaje}
-          </div>
-        )}
       </div>
       <Footer/>
     </main>

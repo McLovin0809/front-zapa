@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Forms from "../../components/templates/Forms";
-import { generarMensaje } from "../../utils/GenerarMensaje";
 import UsuarioService from "../../services/UsuarioService";
 import { AuthContext } from "../../context/AuthContext";
 import "../../style/pages/AuthPanel.css";
