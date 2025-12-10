@@ -1,8 +1,5 @@
-export const adminLinks = [
-  { to: "/admin/dashboard", label: "Dashboard" },
-  { to: "/admin/users", label: "Usuarios" },
-  { to: "/admin/facciones", label: "Productos" },
-  { to: "/", label: "Salir", onClick: () => handleLogout() }, // opcional
+export const AdminLinks = [
+  { label: "Dashboard", to: "/admin/HomeAdmin" },
+  { label: "Productos", to: "/admin/AddProduct" },
+  { to: "/", label: "Salir", onClick: () => handleLogout() },
 ];
-
-export default adminLinks;

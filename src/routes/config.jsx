@@ -1,29 +1,36 @@
 import { lazy } from 'react';
 
-// Lazy loading
 const Home = lazy(() => import('../pages/user/Home'));
-const Login = lazy(() => import('../pages/auth/Login'));
-const CreateUser = lazy(() => import('../pages/auth/CreateUser'));
-const HomeAdmin = lazy(() => import('../pages/admin/HomeAdmin'));
-const HomeProducto = lazy(() => import('../pages/admin/Productos/HomeProductos')); 
+const About = lazy(() => import('../pages/user/About'));
+const Contact = lazy(() => import('../pages/user/Contact'));
+const PerfilUsuario = lazy(() => import('../pages/user/PerfilUsuario'));
+const ProductosUser = lazy(() => import('../pages/user/ProductosUser'));
+const Carrito = lazy(() => import('../pages/user/Carrito'));
 
-// Rutas públicas
+const AuthPanel = lazy(() => import('../pages/auth/AuthPanel'));
+
+const HomeAdmin = lazy(() => import('../pages/admin/HomeAdmin'));
+const AddProduct = lazy(() => import('../pages/admin/AddProduct'));
+
 const publicRoutes = [
   { path: '/', element: <Home />, showNavbar: true },
-  { path: '/login', element: <Login />, showNavbar: false },
-  { path: '/CreateUser', element: <CreateUser />, showNavbar: false },
+  { path: '/about', element: <About />, showNavbar: true },
+  { path: '/contact', element: <Contact />, showNavbar: true },
+  { path: '/login', element: <AuthPanel />, showNavbar: true },
+  { path: '/register', element: <AuthPanel />, showNavbar: true },
+  { path: '/perfil', element: <PerfilUsuario />, showNavbar: true },
+  { path: '/ProductosUser', element: <ProductosUser />, showNavbar: true },
+  { path: '/Carrito', element: <Carrito />, showNavbar: true }, // 
 ];
 
-// Rutas admin
 const adminRoutes = [
-  { path: '/admin/dashboard', element: <HomeAdmin />, isAdmin: true },
-  { path: '/admin/productos', element: <HomeProducto />, isAdmin: true }, 
+  { path: '/Admin/HomeAdmin', element: <HomeAdmin />, isAdmin: true },
+  { path: '/Admin/AddProduct', element: <AddProduct />, isAdmin: true },
 ];
 
-// Ruta 404
 const notFoundRoute = {
   path: '*',
-  element: <div className="text-center py-10 text-2xl">404 - Página no encontrada u.u</div>,
+  element: <div className="">404 - Página no encontrada u.u</div>,
   showNavbar: false,
 };
 

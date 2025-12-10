@@ -69,7 +69,7 @@
   margin-top: 1rem;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .about-title {
     font-size: 2.2rem;
   }

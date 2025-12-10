@@ -1,0 +1,186 @@
+/* Nuevos estilos para el sistema de subida de imágenes */
+
+/* Asterisco para campos requeridos */
+.required-asterisk {
+    color: #dc3545;
+    margin-left: 4px;
+}
+
+/* Estados de subida */
+.upload-status {
+    margin-top: 12px;
+}
+
+.success-status {
+    margin-top: 12px;
+}
+
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(34, 36, 35, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #222423;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.uploading-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: #222423;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.success-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: #22c55e;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.success-icon {
+    background: #22c55e;
+    color: white;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Zona de drop mejorada */
+.file-drop-zone {
+    border: 2px dashed rgba(34, 36, 35, 0.3);
+    border-radius: 12px;
+    padding: 40px 20px;
+    background: rgba(34, 36, 35, 0.02);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.file-drop-zone:hover:not(.disabled):not(.uploading) {
+    border-color: #222423;
+    background: rgba(34, 36, 35, 0.05);
+    transform: translateY(-2px);
+}
+
+.file-drop-zone.drag-over {
+    border-color: #222423;
+    background: rgba(34, 36, 35, 0.08);
+    transform: scale(1.02);
+}
+
+.file-drop-zone.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.file-drop-zone.uploading {
+    cursor: progress;
+}
+
+.file-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.upload-icon {
+    position: relative;
+    width: 48px;
+    height: 48px;
+}
+
+.upload-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(34, 36, 35, 0.2);
+    border-top: 3px solid #222423;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Preview de imagen con botón de eliminar */
+.preview-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #dc3545;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.remove-image-btn:hover:not(:disabled) {
+    background: #c82333;
+    transform: scale(1.1);
+}
+
+.remove-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.upload-progress {
+    margin-top: 8px;
+    text-align: center;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: rgba(34, 36, 35, 0.7);
+    font-weight: 500;
+}
+
+/* Información de ayuda */
+.image-help {
+    margin-top: 8px;
+}
+
+.help-text {
+    margin: 0;
+    font-size: 11px;
+    color: rgba(34, 36, 35, 0.6);
+    text-align: center;
+}
+
+/* Animaciones mejoradas */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.file-drop-zone.uploading {
+    animation: pulse 2s infinite;
+}

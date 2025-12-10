@@ -14,7 +14,6 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-columns">
 
-        {/* Centro de ayuda */}
         <div className="footer-column">
           <h4>Centro de ayuda</h4>
           <ul>
@@ -22,18 +21,16 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Tienda */}
         <div className="footer-column">
           <h4>Tienda</h4>
           <ul>
-            <li><Link to="/tiendas">Tiendas</Link></li>
-            <li><Link to="/privacidad">Política de privacidad</Link></li>
-            <li><Link to="/faq">Preguntas frecuentes</Link></li>
-            <li><Link to="/terminos">Términos y condiciones</Link></li>
+            <li><Link to="/">Tiendas</Link></li>
+            <li><Link to="/">Política de privacidad</Link></li>
+            <li><Link to="/">Preguntas frecuentes</Link></li>
+            <li><Link to="/">Términos y condiciones</Link></li>
           </ul>
         </div>
 
-        {/* Redes Sociales y Métodos de Pago */}
         <div className="footer-column">
           <h4>Redes Sociales</h4>
           <div className="social-icons">
@@ -58,7 +55,7 @@ const Footer = () => {
           <div className="payment-logos">
             <FaCcVisa />
             <FaCcMastercard />
-            <FaMoneyBillWave /> {/* Ícono general para Redcompra / MercadoPago */}
+            <FaMoneyBillWave /> 
           </div>
         </div>
       </div>

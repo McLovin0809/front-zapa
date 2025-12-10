@@ -87,7 +87,7 @@ const CreateUser = () => {
       generarMensaje("Usuario creado correctamente", "success");
 
       // Redirige al perfil del usuario recién creado
-      setTimeout(() => navigate(`/perfil/${response.data.idUsuario}`), 800);
+      setTimeout(() => navigate(`/login`), 800);
     } catch (error) {
       console.error("Error al registrar usuario:", error.response?.data);
       const msg = error.response?.data?.message || "Error al crear usuario. Verifica los datos o si el email ya existe.";
@@ -108,7 +108,7 @@ const CreateUser = () => {
       type: "inputs",
       inputs: [
         { type: "text", placeholder: "Nombre completo", name: "nombre", value: form.nombre, onChange: handleChange, required: true, autoComplete: "name", className: "auth-input" },
-        { type: "email", placeholder: "Correo electrónico (ej: usuario@admin.com o usuario@cliente.com)", name: "email", value: form.email, onChange: handleChange, required: true, autoComplete: "email", className: "auth-input" },
+        { type: "email", placeholder: "Correo electrónico (@admin o @cliente))", name: "email", value: form.email, onChange: handleChange, required: true, autoComplete: "email", className: "auth-input" },
         { type: "password", placeholder: "Contraseña", name: "clave", value: form.clave, onChange: handleChange, required: true, autoComplete: "new-password", className: "auth-input" },
         { type: "text", placeholder: "Teléfono (opcional)", name: "telefono", value: form.telefono, onChange: handleChange, autoComplete: "tel", className: "auth-input" },
         { type: "text", placeholder: "Calle", name: "direccion.calle", value: form.direccion.calle, onChange: handleChange, required: true, className: "auth-input" },

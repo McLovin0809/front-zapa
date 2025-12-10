@@ -20,6 +20,11 @@ const PerfilUsuario = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("usuario");
+    window.location.href = "/"; 
+  };
+
   if (loading) return <p>Cargando perfil...</p>;
   if (!usuario) return <p>No se encontró el usuario.</p>;
 
@@ -44,13 +49,7 @@ const PerfilUsuario = () => {
         </div>
 
         <div className="perfil-actions">
-          <button
-            className="perfil-btn logout"
-            onClick={() => {
-              localStorage.removeItem("usuario");
-              window.location.href = "/login";
-            }}
-          >
+          <button className="perfil-btn logout" onClick={handleLogout}>
             Cerrar sesión
           </button>
         </div>

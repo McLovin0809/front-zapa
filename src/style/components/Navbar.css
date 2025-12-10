@@ -10,7 +10,7 @@ header {
     align-items: center;
     background: #222423;
     border-radius: 60px;
-    max-width: 600px;
+    max-width: 800px;
     margin-top: 25px;
     box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.9);
 }
@@ -20,7 +20,7 @@ header {
     justify-content: center; 
     align-items: center; 
     gap: 30px;
-    padding: 8px 36px;
+    padding: 8px 60px;
     margin: 10px;
     width: 100%; /
 }

@@ -1,31 +1,57 @@
-import { Routes, Route } from "react-router-dom";
-import { publicLinks } from "./data/navbarPublicLinks";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { Suspense } from "react";
+import { PublicLinks } from "./data/navbarPublicLinks";
+import { AdminLinks } from "./data/navbarAdminLinks";
 import Navbar from "./components/organisms/Navbar";
-import Home from "./pages/user/Home";
-import Contact from "./pages/user/Contact";
-import HomeAdmin from "./pages/admin/HomeAdmin";
-import PerfilUsuario from "./pages/user/PerfilUsuario";
-import AuthPanel from "./pages/auth/AuthPanel";
-import AddProduct from "./pages/admin/AddProduct";
-import "./style/components/Toast.css";
-import About from "./pages/user/About";
+import { appRoutes } from "./routes/config";
 
-function App() {
+function Layout() {
+  const location = useLocation();
+
+  // Convertimos a minúsculas para evitar problemas con mayúsculas
+  const path = location.pathname.toLowerCase();
+  const isAdminRoute = path.startsWith("/admin");
+
+  const currentRoute = appRoutes.find(
+    route => route.path.toLowerCase() === path
+  );
+
+  const showNavbar = isAdminRoute || currentRoute?.showNavbar;
+
+  const navbarTitle = isAdminRoute ? "ZAPA STORE Admin" : "ZAPA STORE";
+
   return (
     <>
-      <Navbar links={publicLinks} title="ZAPA STORE" />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<AuthPanel />} />
-        <Route path="/register" element={<AuthPanel />} />
-        <Route path="/perfil" element={<PerfilUsuario />} />
-        <Route path="/Admin/HomeAdmin" element={<HomeAdmin />} />
-        <Route path="/admin/AddProduct" element={<AddProduct />} />
-      </Routes>
+      {showNavbar && (
+        <Navbar
+          links={isAdminRoute ? AdminLinks : PublicLinks}
+          title={navbarTitle}
+          isAdmin={isAdminRoute}
+          adminLinks={AdminLinks}
+        />
+      )}
+
+      <main>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-600"></div>
+            </div>
+          }
+        >
+          <Routes>
+            {appRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
+          </Routes>
+        </Suspense>
+      </main>
     </>
   );
+}
+
+function App() {
+  return <Layout />;
 }
 
 export default App;

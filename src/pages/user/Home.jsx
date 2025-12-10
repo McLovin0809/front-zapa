@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import TextAtom from '../../components/atoms/TextAtom';
@@ -6,31 +6,33 @@ import carouselImages from '../../data/image/image';
 import Footer from '../../components/organisms/Footer';
 import { motion } from 'framer-motion';
 import { carouselVariants, itemVariants } from '../../animations/carouselAnimations';
+import { CartContext } from '../../context/CartContext';
 import '../../style/pages/Home.css';
 
 const Home = () => {
   const [productos, setProductos] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [mensaje, setMensaje] = useState(""); // ✅ mensaje visual
+
+  const { agregarProducto } = useContext(CartContext);
 
   useEffect(() => {
     fetchProductos();
-
-    // Auto-play para el carousel
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
     }, 5000);
-
     return () => clearInterval(interval);
   }, []);
 
   const fetchProductos = () => {
     ProductoService.getAllProductos()
-      .then(response => {
-        setProductos(response.data);
-      })
-      .catch(error => {
-        console.log('Error fetching productos:', error);
-      });
+      .then(response => setProductos(response.data))
+      .catch(error => console.log('Error fetching productos:', error));
+  };
+
+  const mostrarMensaje = (texto) => {
+    setMensaje(texto);
+    setTimeout(() => setMensaje(""), 2500);
   };
 
   const calcularPrecioConDescuento = (precio, descuento) => {
@@ -52,7 +54,7 @@ const Home = () => {
   return (
     <main>
       <div className="home">
-        {/* Carousel */}
+        {/* Carrusel */}
         <motion.div 
           className="carousel"
           variants={carouselVariants}
@@ -65,7 +67,7 @@ const Home = () => {
                 key={index}
                 className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
               >
-                <img src={image.src} alt={image.alt} className="carousel-image" />
+                <img src={image.src} alt={image.alt || image.title} className="carousel-image" />
                 <motion.div className="carousel-content" variants={carouselVariants}>
                   <motion.div variants={itemVariants}>
                     <TextAtom variant="h2" className="carousel-title">{image.title}</TextAtom>
@@ -73,7 +75,11 @@ const Home = () => {
                   <motion.div variants={itemVariants}>
                     <TextAtom variant="p" className="carousel-description">{image.description}</TextAtom>
                   </motion.div>
-                  <motion.button className="carousel-btn" variants={itemVariants}>
+                  <motion.button 
+                    className="carousel-btn" 
+                    variants={itemVariants}
+                    onClick={() => window.scrollTo({ top: 600, behavior: 'smooth' })}
+                  >
                     Ver Colección
                   </motion.button>
                 </motion.div>
@@ -154,14 +160,15 @@ const Home = () => {
                   <button 
                     className={`btn-agregar-carrito ${producto.stock > 0 ? 'btn-disponible' : 'btn-agotado'}`}
                     disabled={producto.stock === 0}
+                    onClick={() => {
+                      agregarProducto(producto);
+                      mostrarMensaje(`✅ ${producto.nombre} agregado al carrito`);
+                    }}
                   >
                     <TextAtom variant="span">
                       {producto.stock > 0 ? 'Agregar al Carrito' : 'Agotado'}
                     </TextAtom>
                   </button>
-                  <Link to={`/producto/${producto.idProducto}`} className="btn-ver-detalles">
-                    <TextAtom variant="span">Ver</TextAtom>
-                  </Link>
                 </div>
               </div>
             </div>
@@ -180,6 +187,13 @@ const Home = () => {
             Mostrando {productos.length} producto{productos.length !== 1 ? 's' : ''}
           </TextAtom>
         </div>
+
+        {/* ✅ Mensaje visual */}
+        {mensaje && (
+          <div className="mensaje-toast">
+            {mensaje}
+          </div>
+        )}
       </div>
       <Footer/>
     </main>

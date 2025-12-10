@@ -14,14 +14,14 @@ const About = () => {
       <section className="about-section">
         <h2>Nuestra Historia</h2>
         <p>
-          Desde nuestros humildes comienzos, hemos crecido y evolucionado, siempre comprometidos con la excelencia y la satisfacción del cliente.
+          Estabamos en una junta y nos miramos a los pies y pensamos en querer innovar vendiendo zapatillas asi que aqui estamos 
         </p>
       </section>
 
       <section className="about-section">
         <h2>Misión</h2>
         <p>
-          Proporcionar soluciones innovadoras y personalizadas, creando valor para nuestros clientes y contribuyendo al desarrollo sostenible.
+          Propocionar soluciones y satisfaciones a nuestros clientes mediantes sus gustos por el calzado
         </p>
       </section>
 
@@ -35,7 +35,7 @@ const About = () => {
       <section className="about-section">
         <h2>Nuestro Equipo</h2>
         <p>
-          Contamos con un equipo talentoso y apasionado, que trabaja en conjunto para alcanzar metas comunes y superar expectativas.
+          Somos un equipo de 3 desarrolladores FullStack 
         </p>
       </section>
     </div>
