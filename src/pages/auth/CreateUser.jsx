@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Forms from "../../components/templates/Forms";
-import { generarMensaje } from "../../utils/GenerarMensaje";
 import UsuarioService from "../../services/UsuarioService";
 import "../../style/pages/AuthPanel.css";
 
@@ -55,7 +54,7 @@ const CreateUser = () => {
     const { nombre, email, clave, telefono, direccion } = form;
 
     if (!nombre || !email || !clave || !direccion.calle || !direccion.numero || !direccion.idComuna) {
-      generarMensaje("Completa todos los campos obligatorios", "warning");
+      //generarMensaje("Completa todos los campos obligatorios", "warning");
       return;
     }
 
@@ -63,7 +62,7 @@ const CreateUser = () => {
     if (email.endsWith("@admin.com")) rolId = 1;
     else if (email.endsWith("@cliente.com")) rolId = 2;
     else {
-      generarMensaje("El correo debe terminar en @admin.com o @cliente.com", "error");
+      //generarMensaje("El correo debe terminar en @admin.com o @cliente.com", "error");
       return;
     }
 
@@ -84,14 +83,14 @@ const CreateUser = () => {
       };
 
       const response = await UsuarioService.createUsuario(usuario);
-      generarMensaje("Usuario creado correctamente", "success");
+      //generarMensaje("Usuario creado correctamente", "success");
 
       // Redirige al perfil del usuario recién creado
       setTimeout(() => navigate(`/login`), 800);
     } catch (error) {
       console.error("Error al registrar usuario:", error.response?.data);
       const msg = error.response?.data?.message || "Error al crear usuario. Verifica los datos o si el email ya existe.";
-      generarMensaje(msg, "error");
+      //generarMensaje(msg, "error");
     } finally {
       setLoading(false);
     }

@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Forms from "../../components/templates/Forms";
-import { generarMensaje } from "../../utils/GenerarMensaje";
 import UsuarioService from "../../services/UsuarioService";
 import { AuthContext } from "../../context/AuthContext";
 import "../../style/pages/AuthPanel.css";
@@ -20,7 +19,7 @@ const Login = () => {
     e.preventDefault();
 
     if (!form.email || !form.clave) {
-      generarMensaje("Completa todos los campos", "warning");
+      //generarMensaje("Completa todos los campos", "warning");
       return;
     }
 
@@ -32,7 +31,7 @@ const Login = () => {
         clave: form.clave,
       });
 
-      generarMensaje("Login exitoso", "success");
+      //generarMensaje("Login exitoso", "success");
       login(response.data);
       localStorage.setItem("usuario", JSON.stringify(response.data)); // ✅ persistencia
 
@@ -46,11 +45,11 @@ const Login = () => {
       console.error("Error en login:", error.response?.data);
 
       if (error.response?.status === 404 || error.response?.data?.message === "Usuario no encontrado") {
-        generarMensaje("El usuario no existe. Verifica tu correo.", "error");
+        //generarMensaje("El usuario no existe. Verifica tu correo.", "error");
       } else if (error.response?.status === 401) {
-        generarMensaje("Credenciales inválidas. Verifica tu email y contraseña.", "error");
+        //generarMensaje("Credenciales inválidas. Verifica tu email y contraseña.", "error");
       } else {
-        generarMensaje("Error al iniciar sesión. Intenta nuevamente.", "error");
+        //generarMensaje("Error al iniciar sesión. Intenta nuevamente.", "error");
       }
     } finally {
       setLoading(false);
