@@ -16,39 +16,29 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+  if (!form.email || !form.clave) {
+    alert("Completa todos los campos");
+    return;
+  }
+  setLoading(true);
 
-    if (!form.email || !form.clave) {
-      alert("Completa todos los campos");
-      return;
+  try {
+    const { data } = await UsuarioService.login(form);
+
+    login({ nombre: data.usuario, email: data.email, rol: data.rol }, data.token);
+
+    if (data.rol === "ADMIN") {
+      navigate("/Admin/HomeAdmin");
+    } else {
+      navigate("/perfil");
     }
-
-    setLoading(true);
-
-    try {
-      const { data } = await UsuarioService.login(form);
-
-      console.log("Login OK:", data);
-
-      // ✅ Guardar en contexto y localStorage
-      login(
-        { nombre: data.usuario, email: data.email, rol: data.rol },
-        data.token
-      );
-
-      // ✅ Redirección por rol
-      if (data.rol === "ADMIN") {
-        navigate("/Admin/HomeAdmin");
-      } else {
-        navigate("/perfil");
-      }
-    } catch (error) {
-      console.error("Error en login:", error.response?.data);
-      alert("Correo o contraseña incorrectos");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (error) {
+    alert("Correo o contraseña incorrectos");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const loginData = [
     { type: "text", text: [{ content: "Iniciar sesión", variant: "h1", className: "auth-title" }] },

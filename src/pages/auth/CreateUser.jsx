@@ -48,50 +48,39 @@ const CreateUser = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  const { nombre, email, clave, direccion } = form;
+  if (!nombre || !email || !clave || !direccion.calle || !direccion.numero || !direccion.idComuna) {
+    alert("Completa todos los campos obligatorios");
+    return;
+  }
 
-    const { nombre, email, clave, direccion } = form;
-    if (!nombre || !email || !clave || !direccion.calle || !direccion.numero || !direccion.idComuna) {
-      alert("Completa todos los campos obligatorios");
-      return;
-    }
+  let rolId = email.endsWith("@admin.com") ? 1 : 2;
 
-    // Rol según dominio del correo
-    let rolId;
-    if (email.endsWith("@admin.com")) rolId = 1;
-    else if (email.endsWith("@cliente.com")) rolId = 2;
-    else {
-      alert("El correo debe terminar en @admin.com o @cliente.com");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      const usuario = {
-        nombre,
-        email,
-        clave,
-        telefono: form.telefono || null,
-        rol: { idRol: rolId },
-        direccion: {
-          calle: direccion.calle,
-          numero: direccion.numero,
-          comuna: { idComuna: parseInt(direccion.idComuna) }
-        }
-      };
-
-      await UsuarioService.createUsuario(usuario);
-      alert("Usuario creado correctamente");
-      navigate("/login");
-    } catch (error) {
-      console.error("Error al crear usuario:", error.response?.data);
-      alert("Error al crear usuario. Puede que el correo ya exista.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const usuario = {
+      nombre,
+      email,
+      clave,
+      telefono: form.telefono || null,
+      rol: { idRol: rolId },
+      direccion: {
+        calle: direccion.calle,
+        numero: direccion.numero,
+        comuna: { idComuna: parseInt(direccion.idComuna) }
+      }
+    };
+    await UsuarioService.createUsuario(usuario);
+    alert("Usuario creado correctamente");
+    navigate("/login");
+  } catch {
+    alert("Error al crear usuario");
+  } finally {
+    setLoading(false);
+  }
+};
 
   const comunaOptions = [
     { label: "Selecciona comuna", value: "" },
