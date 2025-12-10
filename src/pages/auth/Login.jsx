@@ -36,8 +36,9 @@ const Login = () => {
       // GUARDAMOS TOKEN JWT
       localStorage.setItem("token", response.data.token);
 
-      login(response.data);
-      localStorage.setItem("usuario", JSON.stringify(response.data)); // ✅ persistencia
+      llogin(response.data);
+      localStorage.setItem("token", response.data.token); // ✅ GUARDA EL TOKEN
+      localStorage.setItem("usuario", JSON.stringify(response.data)); // ✅ USUARIO
 
       const userEmail = response.data.email;
 
